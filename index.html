@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Takip Sistemi - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+    <div class="flex h-screen">
+        <!-- Sidebar: Organizasyon ve Projeler -->
+        <aside class="w-64 bg-slate-900 text-white flex flex-col">
+            <div class="p-6 text-2xl font-bold border-b border-slate-700 flex items-center gap-2">
+                <i class="fas fa-layer-group text-blue-400"></i> DevTrack
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-4">
+                <div>
+                    <p class="text-xs uppercase text-gray-400 font-semibold mb-2">Organizasyon</p>
+                    <a href="#" class="flex items-center gap-3 p-2 rounded bg-slate-800"><i class="fas fa-building"></i> Teknoloji Ekibi</a>
+                </div>
+                
+                <div>
+                    <p class="text-xs uppercase text-gray-400 font-semibold mb-2">Projeler</p>
+                    <ul class="space-y-1 text-sm">
+                        <li class="p-2 hover:bg-slate-800 rounded cursor-pointer border-l-4 border-blue-500 bg-slate-800/50">Mobil Uygulama</li>
+                        <li class="p-2 hover:bg-slate-800 rounded cursor-pointer border-l-4 border-transparent">Web Portalı</li>
+                        <li class="p-2 hover:bg-slate-800 rounded cursor-pointer border-l-4 border-transparent">API Entegrasyonu</li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-slate-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold">GK</div>
+                    <span class="text-sm">Gökhan K.</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Ana İçerik Alanı -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Üst Header: Filtreler ve İşlemler -->
+            <header class="h-16 bg-white border-b flex items-center justify-between px-8">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-bold text-gray-800">Mobil Uygulama / Sprint 12</h1>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">
+                        <i class="fas fa-plus mr-1"></i> Görev Oluştur
+                    </button>
+                </div>
+                
+                <div class="flex items-center gap-4 text-sm">
+                    <div class="relative">
+                        <input type="text" placeholder="Ara..." class="pl-8 pr-4 py-1.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-400 text-sm">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400"></i>
+                    </div>
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full border-2 border-white bg-green-500 text-xs flex items-center justify-center text-white" title="Ali">A</div>
+                        <div class="w-8 h-8 rounded-full border-2 border-white bg-purple-500 text-xs flex items-center justify-center text-white" title="Merve">M</div>
+                        <div class="w-8 h-8 rounded-full border-2 border-white bg-orange-500 text-xs flex items-center justify-center text-white" title="Can">C</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Kanban Board -->
+            <section class="flex-1 overflow-x-auto p-6 bg-gray-50 flex gap-6">
+                
+                <!-- Sütun: Yapılacaklar -->
+                <div class="w-80 flex-shrink-0 flex flex-col">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-semibold text-gray-600 uppercase text-xs tracking-wider">Yapılacaklar <span class="bg-gray-200 px-2 py-0.5 rounded ml-1 text-gray-500">2</span></h3>
+                    </div>
+                    <div class="space-y-3 flex-1 overflow-y-auto">
+                        <!-- Kart 1 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-400 transition cursor-grab">
+                            <span class="text-[10px] font-bold text-blue-600 uppercase">Feature</span>
+                            <p class="text-sm font-medium mt-1 mb-3">Login ekranına 'Şifremi Unuttum' butonu eklenecek.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-400"><i class="far fa-clock mr-1"></i> 2 gün kaldı</span>
+                                <div class="w-6 h-6 rounded-full bg-purple-500 text-[10px] flex items-center justify-center text-white">M</div>
+                            </div>
+                        </div>
+                        <!-- Kart 2 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-400 transition cursor-grab">
+                            <span class="text-[10px] font-bold text-red-600 uppercase">Bug</span>
+                            <p class="text-sm font-medium mt-1 mb-3">Dark mode geçişinde başlıklar siyah kalıyor.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-red-500 font-medium italic">Yüksek Öncelik</span>
+                                <div class="w-6 h-6 rounded-full bg-green-500 text-[10px] flex items-center justify-center text-white">A</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sütun: Yapılıyor -->
+                <div class="w-80 flex-shrink-0 flex flex-col">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-semibold text-gray-600 uppercase text-xs tracking-wider">İşlemde <span class="bg-blue-100 px-2 py-0.5 rounded ml-1 text-blue-600">1</span></h3>
+                    </div>
+                    <div class="space-y-3 flex-1">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 border-y border-r border-gray-200 transition cursor-grab">
+                            <span class="text-[10px] font-bold text-green-600 uppercase">Refactor</span>
+                            <p class="text-sm font-medium mt-1 mb-3">API istekleri için merkezi bir error handler yazılması.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex gap-2">
+                                    <i class="far fa-comment text-gray-400 text-xs"> 3</i>
+                                    <i class="fas fa-paperclip text-gray-400 text-xs"> 1</i>
+                                </div>
+                                <div class="w-6 h-6 rounded-full bg-orange-500 text-[10px] flex items-center justify-center text-white">C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sütun: Tamamlandı -->
+                <div class="w-80 flex-shrink-0 flex flex-col">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-semibold text-gray-600 uppercase text-xs tracking-wider">Tamamlandı <span class="bg-green-100 px-2 py-0.5 rounded ml-1 text-green-600">0</span></h3>
+                    </div>
+                    <div class="border-2 border-dashed border-gray-200 rounded-lg flex-1 flex items-center justify-center text-gray-400 italic text-sm">
+                        Henüz görev yok
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
