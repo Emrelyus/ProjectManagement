@@ -50,6 +50,8 @@ header{height:60px;background:#161b27;border-bottom:1px solid #1e2535;display:fl
 .column{width:300px;flex-shrink:0;display:flex;flex-direction:column;background:#161b27;border-radius:12px;border:1px solid #1e2535;overflow:hidden}
 .col-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e2535}
 .col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:8px}
+.col-add-task-btn{width:100%;padding:9px;background:transparent;border:1px dashed #2d3748;border-radius:8px;color:#4b5563;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;font-family:'Inter',sans-serif;margin-top:4px;flex-shrink:0}
+.col-add-task-btn:hover{border-color:#6366f1;color:#6366f1}
 .col-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
 .col-yapilacak .col-title{color:#94a3b8}.col-yapilacak .col-badge{background:#1e2535;color:#94a3b8}
 .col-islemde .col-title{color:#6366f1}.col-islemde .col-badge{background:#1e253580;color:#6366f1}
@@ -269,9 +271,6 @@ header{height:60px;background:#161b27;border-bottom:1px solid #1e2535;display:fl
   <header>
     <div class="header-left">
       <span class="project-title" id="activeProjectTitle">Proje Seçin</span>
-      <button class="btn-new-task" id="btnNewTask" onclick="openNewTaskModal()" style="display:none">
-        <i class="fas fa-plus"></i> Görev Ekle
-      </button>
     </div>
   </header>
   <div class="content-area">
@@ -397,7 +396,6 @@ function selectProject(id) {
   renderPhases(id);
   const p = data.projects.find(x => x.id === id);
   document.getElementById('activeProjectTitle').textContent = p ? p.name : '';
-  document.getElementById('btnNewTask').style.display = 'flex';
   document.getElementById('btnAddPhase').style.display = 'flex';
 }
 
@@ -422,6 +420,7 @@ function renderBoard(projectId) {
       <div class="col-body" id="col-${c.id}" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'${c.id}')">
         ${items.length ? items.map(t => cardHTML(t)).join('') : `<div class="empty-state"><i class="fas fa-inbox"></i><span>Görev yok</span></div>`}
       </div>
+      ${c.id === 'yapilacak' ? '<button class="col-add-task-btn" onclick="openNewTaskModal()"><i class="fas fa-plus"></i> Görev Ekle</button>' : ''}
     </div>`;
   }).join('');
   // attach drag events
