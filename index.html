@@ -1,132 +1,659 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proje Takip Sistemi - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevTrack - Proje Takip</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0f1117;color:#e2e8f0;height:100vh;display:flex;overflow:hidden}
+
+/* SIDEBAR */
+aside{width:260px;background:#161b27;border-right:1px solid #1e2535;display:flex;flex-direction:column;flex-shrink:0}
+.logo{padding:20px;font-size:1.2rem;font-weight:700;border-bottom:1px solid #1e2535;display:flex;align-items:center;gap:10px;color:#fff}
+.logo i{color:#6366f1}
+.sidebar-section{padding:16px;flex:1;overflow-y:auto}
+.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#4b5563;font-weight:600;margin-bottom:8px}
+.project-list{list-style:none;margin-bottom:12px}
+.project-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;border-left:3px solid transparent;transition:all .2s;color:#94a3b8;position:relative}
+.project-item:hover{background:#1e2535;color:#e2e8f0}
+.project-item.active{background:#1e2535;border-left-color:#6366f1;color:#e2e8f0}
+.project-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.proj-actions{display:flex;gap:2px;opacity:0;transition:opacity .2s;margin-left:auto;flex-shrink:0}
+.project-item:hover .proj-actions{opacity:1}
+.proj-btn{background:none;border:none;cursor:pointer;color:#4b5563;font-size:10px;padding:2px 4px;border-radius:3px;transition:color .2s;font-family:inherit}
+.proj-btn:hover{color:#e2e8f0}
+.week-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.week-ok{background:#0d2d22;color:#10b981}
+.week-warn{background:#2d1f00;color:#f59e0b}
+.week-urgent{background:#2d0f0f;color:#ef4444}
+.week-done{background:#1e2535;color:#4b5563}
+.btn-add-project{width:100%;padding:9px;background:transparent;border:1px dashed #2d3748;border-radius:8px;color:#4b5563;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-add-project:hover{border-color:#6366f1;color:#6366f1}
+.sidebar-footer{padding:16px;border-top:1px solid #1e2535;display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.user-name{font-size:13px;font-weight:500}
+.user-role{font-size:11px;color:#4b5563}
+
+/* MAIN */
+main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+header{height:60px;background:#161b27;border-bottom:1px solid #1e2535;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.header-left{display:flex;align-items:center;gap:14px}
+.project-title{font-size:16px;font-weight:600}
+.btn-new-task{background:#6366f1;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:500;transition:background .2s}
+.btn-new-task:hover{background:#5254cc}
+
+/* BOARD */
+.board{flex:1;display:flex;gap:20px;padding:24px;overflow-x:auto;overflow-y:hidden}
+.column{width:300px;flex-shrink:0;display:flex;flex-direction:column;background:#161b27;border-radius:12px;border:1px solid #1e2535;overflow:hidden}
+.col-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e2535}
+.col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:8px}
+.col-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.col-yapilacak .col-title{color:#94a3b8}.col-yapilacak .col-badge{background:#1e2535;color:#94a3b8}
+.col-islemde .col-title{color:#6366f1}.col-islemde .col-badge{background:#1e253580;color:#6366f1}
+.col-tamamlandi .col-title{color:#10b981}.col-tamamlandi .col-badge{background:#0d2d2280;color:#10b981}
+.col-bar{height:3px}
+.col-yapilacak .col-bar{background:#374151}
+.col-islemde .col-bar{background:#6366f1}
+.col-tamamlandi .col-bar{background:#10b981}
+.col-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:120px}
+.col-body.drag-over{background:#1e253560;border-radius:8px}
+
+/* CARDS */
+.card{background:#1a2032;border:1px solid #1e2535;border-radius:10px;padding:14px;cursor:grab;transition:all .2s;position:relative}
+.card:hover{border-color:#6366f180;transform:translateY(-1px);box-shadow:0 4px 20px #00000040}
+.card.dragging{opacity:.4;cursor:grabbing}
+.card-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.tag-feature{color:#6366f1}.tag-bug{color:#ef4444}.tag-refactor{color:#10b981}.tag-task{color:#f59e0b}.tag-design{color:#ec4899}
+.card-title{font-size:13px;font-weight:600;line-height:1.4;color:#e2e8f0;margin-bottom:5px}
+.card-desc{font-size:11px;color:#64748b;line-height:1.5;margin-bottom:10px;white-space:pre-wrap}
+.card-duration{font-size:11px;color:#6366f1;display:flex;align-items:center;gap:4px}
+.card-phase-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;display:inline-flex;align-items:center;gap:4px;margin-bottom:8px}
+.card-footer{display:flex;justify-content:space-between;align-items:center}
+.card-meta{font-size:11px;color:#4b5563;display:flex;align-items:center;gap:4px}
+.card-actions{display:flex;gap:4px;opacity:0;transition:opacity .2s}
+.card:hover .card-actions{opacity:1}
+.card-del,.card-edit{background:none;border:none;cursor:pointer;font-size:12px;padding:3px 6px;border-radius:4px;transition:color .2s}
+.card-del{color:#4b5563}.card-del:hover{color:#ef4444}
+.card-edit{color:#4b5563}.card-edit:hover{color:#6366f1}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#2d3748;font-size:13px;gap:6px;padding:20px;text-align:center;min-height:100px}
+.empty-state i{font-size:24px}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:100;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#1a2032;border:1px solid #2d3748;border-radius:16px;padding:28px;width:420px;max-width:95vw;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal h2{font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.modal h2 i{color:#6366f1}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:500}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:9px 12px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#6366f1}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-group select option{background:#1a2032}
+.modal-btns{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.btn-cancel{background:#1e2535;border:none;color:#94a3b8;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px}
+.btn-submit{background:#6366f1;border:none;color:#fff;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;transition:background .2s}
+.btn-submit:hover{background:#5254cc}
+
+/* COLORS */
+.colors{display:flex;gap:8px;flex-wrap:wrap}
+.color-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border .2s}
+.color-dot.selected{border-color:#fff}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#2d3748;border-radius:3px}
+
+/* PHASES PANEL */
+.content-area{flex:1;display:flex;overflow:hidden}
+.phases-panel{width:270px;flex-shrink:0;background:#161b27;border-left:1px solid #1e2535;display:flex;flex-direction:column}
+.phases-panel-header{padding:14px 16px;border-bottom:1px solid #1e2535;display:flex;align-items:center;justify-content:space-between}
+.phases-panel-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:#6366f1;display:flex;align-items:center;gap:8px}
+.btn-add-phase{background:#6366f120;border:none;color:#6366f1;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:background .2s;display:none}
+.btn-add-phase:hover{background:#6366f140}
+.phases-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.phase-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#2d3748;font-size:12px;gap:6px;text-align:center}
+.phase-empty i{font-size:28px}
+.phase-item{background:#1a2032;border:1px solid #1e2535;border-radius:10px;padding:12px;position:relative;transition:border .2s}
+.phase-item:hover{border-color:#6366f140}
+.phase-connector{width:2px;height:10px;background:#2d3748;margin:0 auto 0 17px}
+.phase-dot-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.phase-name{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.phase-dates{display:flex;gap:6px;margin-left:18px;margin-top:2px}
+.phase-date-badge{font-size:10px;padding:2px 7px;border-radius:4px;background:#1e2535;color:#94a3b8;display:flex;align-items:center;gap:4px}
+.phase-actions{display:flex;gap:2px;position:absolute;top:8px;right:8px;opacity:0;transition:opacity .2s}
+.phase-item:hover .phase-actions{opacity:1}
+.phase-btn{background:none;border:none;cursor:pointer;font-size:11px;padding:3px 5px;border-radius:4px;transition:color .2s}
+.phase-btn-edit{color:#4b5563}.phase-btn-edit:hover{color:#6366f1}
+.phase-btn-del{color:#4b5563}.phase-btn-del:hover{color:#ef4444}
+.phase-status{font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;margin-left:auto}
+.ps-done{background:#0d2d22;color:#10b981}
+.ps-active{background:#1e253580;color:#6366f1}
+.ps-pending{background:#1e2535;color:#4b5563}
+</style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-900">
+<body>
 
-    <div class="flex h-screen">
-        <!-- Sidebar: Organizasyon ve Projeler -->
-        <aside class="w-64 bg-slate-900 text-white flex flex-col">
-            <div class="p-6 text-2xl font-bold border-b border-slate-700 flex items-center gap-2">
-                <i class="fas fa-layer-group text-blue-400"></i> DevTrack
-            </div>
-            
-            <nav class="flex-1 p-4 space-y-4">
-                <div>
-                    <p class="text-xs uppercase text-gray-400 font-semibold mb-2">Organizasyon</p>
-                    <a href="#" class="flex items-center gap-3 p-2 rounded bg-slate-800"><i class="fas fa-building"></i> Teknoloji Ekibi</a>
-                </div>
-                
-                <div>
-                    <p class="text-xs uppercase text-gray-400 font-semibold mb-2">Projeler</p>
-                    <ul class="space-y-1 text-sm">
-                        <li class="p-2 hover:bg-slate-800 rounded cursor-pointer border-l-4 border-blue-500 bg-slate-800/50">Mobil Uygulama</li>
-                        <li class="p-2 hover:bg-slate-800 rounded cursor-pointer border-l-4 border-transparent">Web Portalı</li>
-                        <li class="p-2 hover:bg-slate-800 rounded cursor-pointer border-l-4 border-transparent">API Entegrasyonu</li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div class="p-4 border-t border-slate-700">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold">GK</div>
-                    <span class="text-sm">Gökhan K.</span>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Ana İçerik Alanı -->
-        <main class="flex-1 flex flex-col overflow-hidden">
-            <!-- Üst Header: Filtreler ve İşlemler -->
-            <header class="h-16 bg-white border-b flex items-center justify-between px-8">
-                <div class="flex items-center gap-4">
-                    <h1 class="text-xl font-bold text-gray-800">Mobil Uygulama / Sprint 12</h1>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition">
-                        <i class="fas fa-plus mr-1"></i> Görev Oluştur
-                    </button>
-                </div>
-                
-                <div class="flex items-center gap-4 text-sm">
-                    <div class="relative">
-                        <input type="text" placeholder="Ara..." class="pl-8 pr-4 py-1.5 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-400 text-sm">
-                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400"></i>
-                    </div>
-                    <div class="flex -space-x-2">
-                        <div class="w-8 h-8 rounded-full border-2 border-white bg-green-500 text-xs flex items-center justify-center text-white" title="Ali">A</div>
-                        <div class="w-8 h-8 rounded-full border-2 border-white bg-purple-500 text-xs flex items-center justify-center text-white" title="Merve">M</div>
-                        <div class="w-8 h-8 rounded-full border-2 border-white bg-orange-500 text-xs flex items-center justify-center text-white" title="Can">C</div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Kanban Board -->
-            <section class="flex-1 overflow-x-auto p-6 bg-gray-50 flex gap-6">
-                
-                <!-- Sütun: Yapılacaklar -->
-                <div class="w-80 flex-shrink-0 flex flex-col">
-                    <div class="flex justify-between items-center mb-4 px-2">
-                        <h3 class="font-semibold text-gray-600 uppercase text-xs tracking-wider">Yapılacaklar <span class="bg-gray-200 px-2 py-0.5 rounded ml-1 text-gray-500">2</span></h3>
-                    </div>
-                    <div class="space-y-3 flex-1 overflow-y-auto">
-                        <!-- Kart 1 -->
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-400 transition cursor-grab">
-                            <span class="text-[10px] font-bold text-blue-600 uppercase">Feature</span>
-                            <p class="text-sm font-medium mt-1 mb-3">Login ekranına 'Şifremi Unuttum' butonu eklenecek.</p>
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-gray-400"><i class="far fa-clock mr-1"></i> 2 gün kaldı</span>
-                                <div class="w-6 h-6 rounded-full bg-purple-500 text-[10px] flex items-center justify-center text-white">M</div>
-                            </div>
-                        </div>
-                        <!-- Kart 2 -->
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:border-blue-400 transition cursor-grab">
-                            <span class="text-[10px] font-bold text-red-600 uppercase">Bug</span>
-                            <p class="text-sm font-medium mt-1 mb-3">Dark mode geçişinde başlıklar siyah kalıyor.</p>
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-red-500 font-medium italic">Yüksek Öncelik</span>
-                                <div class="w-6 h-6 rounded-full bg-green-500 text-[10px] flex items-center justify-center text-white">A</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sütun: Yapılıyor -->
-                <div class="w-80 flex-shrink-0 flex flex-col">
-                    <div class="flex justify-between items-center mb-4 px-2">
-                        <h3 class="font-semibold text-gray-600 uppercase text-xs tracking-wider">İşlemde <span class="bg-blue-100 px-2 py-0.5 rounded ml-1 text-blue-600">1</span></h3>
-                    </div>
-                    <div class="space-y-3 flex-1">
-                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 border-y border-r border-gray-200 transition cursor-grab">
-                            <span class="text-[10px] font-bold text-green-600 uppercase">Refactor</span>
-                            <p class="text-sm font-medium mt-1 mb-3">API istekleri için merkezi bir error handler yazılması.</p>
-                            <div class="flex justify-between items-center">
-                                <div class="flex gap-2">
-                                    <i class="far fa-comment text-gray-400 text-xs"> 3</i>
-                                    <i class="fas fa-paperclip text-gray-400 text-xs"> 1</i>
-                                </div>
-                                <div class="w-6 h-6 rounded-full bg-orange-500 text-[10px] flex items-center justify-center text-white">C</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sütun: Tamamlandı -->
-                <div class="w-80 flex-shrink-0 flex flex-col">
-                    <div class="flex justify-between items-center mb-4 px-2">
-                        <h3 class="font-semibold text-gray-600 uppercase text-xs tracking-wider">Tamamlandı <span class="bg-green-100 px-2 py-0.5 rounded ml-1 text-green-600">0</span></h3>
-                    </div>
-                    <div class="border-2 border-dashed border-gray-200 rounded-lg flex-1 flex items-center justify-center text-gray-400 italic text-sm">
-                        Henüz görev yok
-                    </div>
-                </div>
-
-            </section>
-        </main>
+<!-- PROJE MODAL (ekle/düzenle) -->
+<div class="overlay" id="projectModal">
+  <div class="modal">
+    <h2 id="projModalTitle"><i class="fas fa-folder-plus"></i> Yeni Proje</h2>
+    <input type="hidden" id="editingProjectId">
+    <div class="form-group">
+      <label>Proje Adı</label>
+      <input type="text" id="projectName" placeholder="Proje adını girin...">
     </div>
+    <div class="form-group">
+      <label>Bitiş Tarihi</label>
+      <input type="date" id="projectDeadline">
+    </div>
+    <div class="form-group">
+      <label>Renk</label>
+      <div class="colors" id="colorPicker">
+        <div class="color-dot selected" style="background:#6366f1" data-color="#6366f1"></div>
+        <div class="color-dot" style="background:#10b981" data-color="#10b981"></div>
+        <div class="color-dot" style="background:#f59e0b" data-color="#f59e0b"></div>
+        <div class="color-dot" style="background:#ef4444" data-color="#ef4444"></div>
+        <div class="color-dot" style="background:#ec4899" data-color="#ec4899"></div>
+        <div class="color-dot" style="background:#06b6d4" data-color="#06b6d4"></div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('projectModal')">İptal</button>
+      <button class="btn-submit" id="projSubmitBtn" onclick="saveProject()">Oluştur</button>
+    </div>
+  </div>
+</div>
 
+<!-- GÖREV EKLE MODAL -->
+<div class="overlay" id="taskModal">
+  <div class="modal">
+    <h2 id="taskModalTitle"><i class="fas fa-plus-circle"></i> Yeni Görev</h2>
+    <input type="hidden" id="editingTaskId">
+    <div class="form-group">
+      <label>Görev Başlığı</label>
+      <input type="text" id="taskTitle" placeholder="Kısa ve net bir başlık...">
+    </div>
+    <div class="form-group">
+      <label>Açıklama</label>
+      <textarea id="taskText" placeholder="Görev detaylarını buraya yazın..." style="min-height:70px"></textarea>
+    </div>
+    <div style="display:flex;gap:12px">
+      <div class="form-group" style="flex:1">
+        <label>Etiket</label>
+        <select id="taskTag">
+          <option value="task">Görev</option>
+          <option value="feature">Feature</option>
+          <option value="bug">Bug</option>
+          <option value="refactor">Refactor</option>
+          <option value="design">Design</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label>Öncelik</label>
+        <select id="taskPriority">
+          <option value="normal">Normal</option>
+          <option value="high">Yüksek</option>
+          <option value="low">Düşük</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Görev Süresi (gün)</label>
+      <input type="number" id="taskDuration" placeholder="Örn: 3" min="1" max="365">
+    </div>
+    <div class="form-group">
+      <label>Proje Adımı</label>
+      <select id="taskPhase">
+        <option value="">— Bağlı değil —</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('taskModal')">İptal</button>
+      <button class="btn-submit" id="taskSubmitBtn" onclick="saveTask()">Ekle</button>
+    </div>
+  </div>
+</div>
+
+<aside>
+  <div class="logo"><i class="fas fa-layer-group"></i> DevTrack</div>
+  <div class="sidebar-section">
+    <p class="sidebar-label">Projeler</p>
+    <ul class="project-list" id="projectList"></ul>
+    <button class="btn-add-project" onclick="openNewProjectModal()">
+      <i class="fas fa-plus"></i> Proje Ekle
+    </button>
+  </div>
+  <div class="sidebar-footer">
+    <div class="avatar">EK</div>
+    <div>
+      <div class="user-name">Emre Karabek</div>
+      <div class="user-role">Yönetici</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ADIM MODAL -->
+<div class="overlay" id="phaseModal">
+  <div class="modal">
+    <h2 id="phaseModalTitle"><i class="fas fa-flag"></i> Yeni Adım</h2>
+    <input type="hidden" id="editingPhaseId">
+    <div class="form-group">
+      <label>Adım Adı</label>
+      <input type="text" id="phaseName" placeholder="Örn: Fizibilite, Tasarım...">
+    </div>
+    <div style="display:flex;gap:12px">
+      <div class="form-group" style="flex:1">
+        <label>Başlangıç</label>
+        <input type="date" id="phaseStart">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label>Bitiş</label>
+        <input type="date" id="phaseEnd">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('phaseModal')">İptal</button>
+      <button class="btn-submit" id="phaseSubmitBtn" onclick="savePhase()">Ekle</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <header>
+    <div class="header-left">
+      <span class="project-title" id="activeProjectTitle">Proje Seçin</span>
+      <button class="btn-new-task" id="btnNewTask" onclick="openNewTaskModal()" style="display:none">
+        <i class="fas fa-plus"></i> Görev Ekle
+      </button>
+    </div>
+  </header>
+  <div class="content-area">
+    <div class="board" id="board">
+      <div style="display:flex;align-items:center;justify-content:center;flex:1;color:#2d3748;flex-direction:column;gap:10px">
+        <i class="fas fa-diagram-project" style="font-size:48px"></i>
+        <p style="font-size:14px">Soldaki menüden bir proje seçin veya oluşturun</p>
+      </div>
+    </div>
+    <div class="phases-panel" id="phasesPanel">
+      <div class="phases-panel-header">
+        <div class="phases-panel-title"><i class="fas fa-list-check"></i> Proje Adımları</div>
+        <button class="btn-add-phase" id="btnAddPhase" onclick="openNewPhaseModal()"><i class="fas fa-plus"></i> Adım</button>
+      </div>
+      <div class="phases-list" id="phasesList">
+        <div class="phase-empty"><i class="fas fa-flag"></i><span>Proje seçin</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const COLORS = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
+const TAGS = {task:'Görev',feature:'Feature',bug:'Bug',refactor:'Refactor',design:'Design'};
+const PRIORITY_LABELS = {high:'🔴 Yüksek',normal:'⚪ Normal',low:'🔵 Düşük'};
+
+let data = JSON.parse(localStorage.getItem('devtrack') || '{"projects":[],"tasks":{},"phases":{}}');
+if (!data.phases) data.phases = {};
+let activeProjectId = null;
+let selectedColor = '#6366f1';
+let draggedId = null;
+
+function save() { localStorage.setItem('devtrack', JSON.stringify(data)); }
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// PROJECT
+function weeksLabel(deadline) {
+  if (!deadline) return '';
+  const diff = Math.ceil((new Date(deadline) - new Date()) / (7 * 864e5));
+  if (diff < 0) return {text: 'Bitti', cls: 'week-done'};
+  if (diff === 0) return {text: 'Bu hafta!', cls: 'week-urgent'};
+  if (diff <= 2) return {text: diff + ' hafta', cls: 'week-urgent'};
+  if (diff <= 5) return {text: diff + ' hafta', cls: 'week-warn'};
+  return {text: diff + ' hafta', cls: 'week-ok'};
+}
+
+function renderProjects() {
+  const list = document.getElementById('projectList');
+  list.innerHTML = '';
+  data.projects.forEach(p => {
+    const li = document.createElement('li');
+    li.className = 'project-item' + (p.id === activeProjectId ? ' active' : '');
+    const wk = p.deadline ? weeksLabel(p.deadline) : null;
+    const badge = wk ? `<span class="week-badge ${wk.cls}">${wk.text}</span>` : '';
+    li.innerHTML = `<div class="dot" style="background:${p.color}"></div><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</span>${badge}<div class="proj-actions"><button class="proj-btn" onclick="editProject('${p.id}',event)" title="Düzenle"><i class="fas fa-pen"></i></button><button class="proj-btn" onclick="deleteProject('${p.id}',event)" title="Sil"><i class="fas fa-times"></i></button></div>`;
+    li.addEventListener('click', ()=>selectProject(p.id));
+    list.appendChild(li);
+  });
+}
+
+function openNewProjectModal() {
+  document.getElementById('editingProjectId').value = '';
+  document.getElementById('projModalTitle').innerHTML = '<i class="fas fa-folder-plus"></i> Yeni Proje';
+  document.getElementById('projSubmitBtn').textContent = 'Oluştur';
+  document.getElementById('projectName').value = '';
+  document.getElementById('projectDeadline').value = '';
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));
+  document.querySelector('.color-dot[data-color="#6366f1"]').classList.add('selected');
+  selectedColor = '#6366f1';
+  openModal('projectModal');
+}
+
+function editProject(id, e) {
+  e.stopPropagation();
+  const p = data.projects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('editingProjectId').value = id;
+  document.getElementById('projModalTitle').innerHTML = '<i class="fas fa-pen"></i> Projeyi Düzenle';
+  document.getElementById('projSubmitBtn').textContent = 'Kaydet';
+  document.getElementById('projectName').value = p.name;
+  document.getElementById('projectDeadline').value = p.deadline || '';
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));
+  const dot = document.querySelector(`.color-dot[data-color="${p.color}"]`);
+  if (dot) dot.classList.add('selected');
+  selectedColor = p.color;
+  openModal('projectModal');
+}
+
+function saveProject() {
+  const name = document.getElementById('projectName').value.trim();
+  const deadline = document.getElementById('projectDeadline').value;
+  if (!name) { document.getElementById('projectName').focus(); return; }
+  const editingId = document.getElementById('editingProjectId').value;
+  if (editingId) {
+    const p = data.projects.find(x => x.id === editingId);
+    if (p) { p.name = name; p.color = selectedColor; p.deadline = deadline; }
+    save(); closeModal('projectModal'); renderProjects();
+    if (activeProjectId === editingId) document.getElementById('activeProjectTitle').textContent = name;
+  } else {
+    const p = { id: uid(), name, color: selectedColor, deadline };
+    data.projects.push(p);
+    data.tasks[p.id] = [];
+    save(); closeModal('projectModal');
+    renderProjects(); selectProject(p.id);
+  }
+}
+
+function deleteProject(id, e) {
+  e.stopPropagation();
+  if (!confirm('Proje silinsin mi?')) return;
+  data.projects = data.projects.filter(p => p.id !== id);
+  delete data.tasks[id];
+  save();
+  if (activeProjectId === id) { activeProjectId = null; renderBoard(null); document.getElementById('btnNewTask').style.display='none'; document.getElementById('activeProjectTitle').textContent='Proje Seçin'; }
+  renderProjects();
+}
+
+function selectProject(id) {
+  activeProjectId = id;
+  renderProjects();
+  renderBoard(id);
+  renderPhases(id);
+  const p = data.projects.find(x => x.id === id);
+  document.getElementById('activeProjectTitle').textContent = p ? p.name : '';
+  document.getElementById('btnNewTask').style.display = 'flex';
+  document.getElementById('btnAddPhase').style.display = 'flex';
+}
+
+// BOARD
+function renderBoard(projectId) {
+  const board = document.getElementById('board');
+  if (!projectId) { board.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;flex:1;color:#2d3748;flex-direction:column;gap:10px"><i class="fas fa-diagram-project" style="font-size:48px"></i><p style="font-size:14px">Soldaki menüden bir proje seçin</p></div>'; return; }
+  const tasks = data.tasks[projectId] || [];
+  const cols = [
+    {id:'yapilacak', label:'Yapılacak', cls:'col-yapilacak', icon:'circle-dot'},
+    {id:'islemde',   label:'İşlemde',   cls:'col-islemde',   icon:'spinner'},
+    {id:'tamamlandi',label:'Tamamlandı',cls:'col-tamamlandi',icon:'circle-check'}
+  ];
+  board.innerHTML = cols.map(c => {
+    const items = tasks.filter(t => t.status === c.id);
+    return `
+    <div class="column ${c.cls}">
+      <div class="col-bar"></div>
+      <div class="col-header">
+        <div class="col-title"><i class="fas fa-${c.icon}"></i>${c.label}<span class="col-badge">${items.length}</span></div>
+      </div>
+      <div class="col-body" id="col-${c.id}" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'${c.id}')">
+        ${items.length ? items.map(t => cardHTML(t)).join('') : `<div class="empty-state"><i class="fas fa-inbox"></i><span>Görev yok</span></div>`}
+      </div>
+    </div>`;
+  }).join('');
+  // attach drag events
+  board.querySelectorAll('.card').forEach(el => {
+    el.addEventListener('dragstart', e => { draggedId = el.dataset.id; el.classList.add('dragging'); });
+    el.addEventListener('dragend', e => { el.classList.remove('dragging'); });
+  });
+}
+
+function cardHTML(t) {
+  const tagCls = 'tag-' + t.tag;
+  const tagLabel = TAGS[t.tag] || t.tag;
+  const pri = t.priority === 'high' ? '<span style="font-size:10px;color:#ef4444">● Yüksek</span>' : t.priority === 'low' ? '<span style="font-size:10px;color:#6366f1">● Düşük</span>' : '<span style="font-size:10px;color:#4b5563">⚪ Normal</span>';
+  const dur = t.duration ? `<span class="card-duration"><i class="fas fa-clock"></i>${t.duration} gün</span>` : '';
+  const desc = t.text ? `<div class="card-desc">${t.text}</div>` : '';
+  let phaseTag = '';
+  if (t.phaseId) {
+    const phases = data.phases[activeProjectId] || [];
+    const colors = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
+    const idx = phases.findIndex(p => p.id === t.phaseId);
+    const ph = phases[idx];
+    if (ph) phaseTag = `<div class="card-phase-tag" style="background:${colors[idx%colors.length]}20;color:${colors[idx%colors.length]}"><i class="fas fa-flag" style="font-size:9px"></i>${ph.name}</div>`;
+  }
+  return `<div class="card" draggable="true" data-id="${t.id}">
+    <div class="card-tag ${tagCls}">${tagLabel}</div>
+    ${phaseTag}
+    <div class="card-title">${t.title || t.text}</div>
+    ${t.title ? desc : ''}
+    <div class="card-footer">
+      <div class="card-meta" style="gap:10px">${pri}${dur}</div>
+      <div class="card-actions">
+        <button class="card-edit" onclick="editTask('${t.id}')"><i class="fas fa-pen"></i></button>
+        <button class="card-del" onclick="deleteTask('${t.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// TASKS
+function populatePhaseSelect(selectedId) {
+  const sel = document.getElementById('taskPhase');
+  const phases = (data.phases[activeProjectId] || []);
+  sel.innerHTML = '<option value="">— Bağlı değil —</option>' +
+    phases.map(ph => `<option value="${ph.id}" ${ph.id===selectedId?'selected':''}>${ph.name}</option>`).join('');
+}
+
+function openNewTaskModal() {
+  document.getElementById('editingTaskId').value = '';
+  document.getElementById('taskModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Yeni Görev';
+  document.getElementById('taskSubmitBtn').textContent = 'Ekle';
+  document.getElementById('taskTitle').value = '';
+  document.getElementById('taskText').value = '';
+  document.getElementById('taskTag').value = 'task';
+  document.getElementById('taskPriority').value = 'normal';
+  document.getElementById('taskDuration').value = '';
+  populatePhaseSelect('');
+  openModal('taskModal');
+}
+
+function editTask(id) {
+  const t = data.tasks[activeProjectId].find(x => x.id === id);
+  if (!t) return;
+  document.getElementById('editingTaskId').value = id;
+  document.getElementById('taskModalTitle').innerHTML = '<i class="fas fa-pen"></i> Görevi Düzenle';
+  document.getElementById('taskSubmitBtn').textContent = 'Kaydet';
+  document.getElementById('taskTitle').value = t.title || '';
+  document.getElementById('taskText').value = t.text || '';
+  document.getElementById('taskTag').value = t.tag || 'task';
+  document.getElementById('taskPriority').value = t.priority || 'normal';
+  document.getElementById('taskDuration').value = t.duration || '';
+  populatePhaseSelect(t.phaseId || '');
+  openModal('taskModal');
+}
+
+function saveTask() {
+  const title = document.getElementById('taskTitle').value.trim();
+  const text = document.getElementById('taskText').value.trim();
+  const duration = document.getElementById('taskDuration').value.trim();
+  const tag = document.getElementById('taskTag').value;
+  const priority = document.getElementById('taskPriority').value;
+  const phaseId = document.getElementById('taskPhase').value;
+  if (!title) { document.getElementById('taskTitle').focus(); return; }
+  const editingId = document.getElementById('editingTaskId').value;
+  if (editingId) {
+    const task = data.tasks[activeProjectId].find(t => t.id === editingId);
+    if (task) { task.title = title; task.text = text; task.tag = tag; task.priority = priority; task.duration = duration; task.phaseId = phaseId; }
+  } else {
+    data.tasks[activeProjectId].push({ id: uid(), title, text, tag, priority, duration, phaseId, status: 'yapilacak' });
+  }
+  save();
+  closeModal('taskModal');
+  renderBoard(activeProjectId);
+  renderPhases(activeProjectId);
+}
+
+function deleteTask(id) {
+  data.tasks[activeProjectId] = data.tasks[activeProjectId].filter(t => t.id !== id);
+  save(); renderBoard(activeProjectId);
+}
+
+// PHASES
+function fmtDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${day}.${m}.${y}`;
+}
+function phaseStatus(start, end) {
+  const now = new Date(); const s = new Date(start); const e = new Date(end);
+  if (now > e) return {label:'Tamamlandı', cls:'ps-done'};
+  if (now >= s) return {label:'Devam Ediyor', cls:'ps-active'};
+  return {label:'Bekliyor', cls:'ps-pending'};
+}
+
+function renderPhases(projectId) {
+  const list = document.getElementById('phasesList');
+  if (!projectId) { list.innerHTML = '<div class="phase-empty"><i class="fas fa-flag"></i><span>Proje seçin</span></div>'; return; }
+  if (!data.phases[projectId]) data.phases[projectId] = [];
+  const phases = data.phases[projectId];
+  if (!phases.length) { list.innerHTML = '<div class="phase-empty"><i class="fas fa-flag"></i><span>Henüz adım yok</span><span style="font-size:11px">+ Adım butonuna tıklayın</span></div>'; return; }
+  const colors = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
+  const allTasks = data.tasks[projectId] || [];
+  list.innerHTML = phases.map((ph, i) => {
+    const c = colors[i % colors.length];
+    const st = ph.start && ph.end ? phaseStatus(ph.start, ph.end) : null;
+    const statusBadge = st ? `<span class="phase-status ${st.cls}">${st.label}</span>` : '';
+    const connector = i > 0 ? '<div class="phase-connector"></div>' : '';
+    // Gün hesapla
+    let dayCount = '';
+    if (ph.start && ph.end) {
+      const days = Math.ceil((new Date(ph.end) - new Date(ph.start)) / 864e5);
+      dayCount = `<span style="font-size:10px;color:#4b5563;display:flex;align-items:center;gap:3px"><i class="fas fa-calendar-days" style="font-size:9px"></i>${days} gün</span>`;
+    }
+    // Bağlı görev sayısı
+    const taskCount = allTasks.filter(t => t.phaseId === ph.id).length;
+    const taskBadge = taskCount > 0 ? `<span style="font-size:10px;background:#1e2535;color:#6366f1;padding:1px 7px;border-radius:10px;font-weight:600">${taskCount} görev</span>` : '';
+    return `${connector}<div class="phase-item">
+      <div class="phase-dot-row">
+        <div class="phase-dot" style="background:${c}"></div>
+        <span class="phase-name">${ph.name}</span>
+        ${statusBadge}
+      </div>
+      <div class="phase-dates">
+        <span class="phase-date-badge"><i class="fas fa-play" style="font-size:8px;color:${c}"></i>${fmtDate(ph.start)||'—'}</span>
+        <span style="color:#2d3748;font-size:10px">→</span>
+        <span class="phase-date-badge"><i class="fas fa-stop" style="font-size:8px;color:#ef4444"></i>${fmtDate(ph.end)||'—'}</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:6px;margin-left:18px;align-items:center">${dayCount}${taskBadge}</div>
+      <div class="phase-actions">
+        <button class="phase-btn phase-btn-edit" onclick="editPhase('${ph.id}')"><i class="fas fa-pen"></i></button>
+        <button class="phase-btn phase-btn-del" onclick="deletePhase('${ph.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openNewPhaseModal() {
+  document.getElementById('editingPhaseId').value = '';
+  document.getElementById('phaseModalTitle').innerHTML = '<i class="fas fa-flag"></i> Yeni Adım';
+  document.getElementById('phaseSubmitBtn').textContent = 'Ekle';
+  document.getElementById('phaseName').value = '';
+  document.getElementById('phaseStart').value = '';
+  document.getElementById('phaseEnd').value = '';
+  openModal('phaseModal');
+}
+
+function editPhase(id) {
+  const ph = (data.phases[activeProjectId]||[]).find(x => x.id === id);
+  if (!ph) return;
+  document.getElementById('editingPhaseId').value = id;
+  document.getElementById('phaseModalTitle').innerHTML = '<i class="fas fa-pen"></i> Adımı Düzenle';
+  document.getElementById('phaseSubmitBtn').textContent = 'Kaydet';
+  document.getElementById('phaseName').value = ph.name;
+  document.getElementById('phaseStart').value = ph.start || '';
+  document.getElementById('phaseEnd').value = ph.end || '';
+  openModal('phaseModal');
+}
+
+function savePhase() {
+  const name = document.getElementById('phaseName').value.trim();
+  const start = document.getElementById('phaseStart').value;
+  const end = document.getElementById('phaseEnd').value;
+  if (!name) { document.getElementById('phaseName').focus(); return; }
+  if (!data.phases[activeProjectId]) data.phases[activeProjectId] = [];
+  const editingId = document.getElementById('editingPhaseId').value;
+  if (editingId) {
+    const ph = data.phases[activeProjectId].find(x => x.id === editingId);
+    if (ph) { ph.name = name; ph.start = start; ph.end = end; }
+  } else {
+    data.phases[activeProjectId].push({ id: uid(), name, start, end });
+  }
+  save(); closeModal('phaseModal'); renderPhases(activeProjectId);
+}
+
+function deletePhase(id) {
+  if (!data.phases[activeProjectId]) return;
+  data.phases[activeProjectId] = data.phases[activeProjectId].filter(x => x.id !== id);
+  save(); renderPhases(activeProjectId);
+}
+
+// DRAG & DROP
+function onDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e, status) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!draggedId) return;
+  const task = data.tasks[activeProjectId].find(t => t.id === draggedId);
+  if (task) { task.status = status; save(); renderBoard(activeProjectId); }
+  draggedId = null;
+}
+
+// MODAL
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
+
+// COLOR PICKER
+document.getElementById('colorPicker').addEventListener('click', e => {
+  const dot = e.target.closest('.color-dot');
+  if (!dot) return;
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  dot.classList.add('selected');
+  selectedColor = dot.dataset.color;
+});
+
+// ENTER KEY
+document.getElementById('projectName').addEventListener('keydown', e => { if(e.key==='Enter') saveProject(); });
+document.getElementById('phaseName').addEventListener('keydown', e => { if(e.key==='Enter') savePhase(); });
+
+// INIT
+renderProjects();
+if (data.projects.length > 0) selectProject(data.projects[0].id);
+</script>
 </body>
 </html>
