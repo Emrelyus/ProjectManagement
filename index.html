@@ -44,6 +44,10 @@ header{height:60px;background:#161b27;border-bottom:1px solid #1e2535;display:fl
 .project-title{font-size:16px;font-weight:600}
 .btn-new-task{background:#6366f1;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:500;transition:background .2s}
 .btn-new-task:hover{background:#5254cc}
+.header-right{display:flex;align-items:center;gap:8px}
+.btn-io{background:#1e2535;border:1px solid #2d3748;color:#94a3b8;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:500;transition:all .2s}
+.btn-io:hover{border-color:#6366f1;color:#6366f1}
+.save-indicator{font-size:11px;color:#10b981;display:flex;align-items:center;gap:4px;opacity:0;transition:opacity .5s}
 
 /* BOARD */
 .board{flex:1;display:flex;gap:20px;padding:24px;overflow-x:auto;overflow-y:hidden}
@@ -272,6 +276,19 @@ header{height:60px;background:#161b27;border-bottom:1px solid #1e2535;display:fl
     <div class="header-left">
       <span class="project-title" id="activeProjectTitle">Proje Seçin</span>
     </div>
+    <div class="header-right">
+      <span class="save-indicator" id="saveIndicator"><i class="fas fa-check-circle"></i> Kaydedildi</span>
+      <button class="btn-io" id="btnUndo" onclick="undoAction()" title="Geri Al (Ctrl+Z)" disabled style="opacity:.4">
+        <i class="fas fa-rotate-left"></i> Geri Al
+      </button>
+      <button class="btn-io" onclick="exportData()" title="Verileri JSON olarak indir">
+        <i class="fas fa-download"></i> Dışa Aktar
+      </button>
+      <button class="btn-io" onclick="document.getElementById('importFile').click()" title="JSON dosyasından yükle">
+        <i class="fas fa-upload"></i> İçe Aktar
+      </button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
   </header>
   <div class="content-area">
     <div class="board" id="board">
@@ -303,7 +320,75 @@ let activeProjectId = null;
 let selectedColor = '#6366f1';
 let draggedId = null;
 
-function save() { localStorage.setItem('devtrack', JSON.stringify(data)); }
+const MAX_HISTORY = 30;
+let history = [];
+let _saveTimer = null;
+
+function save() {
+  // Snapshot al
+  history.push(JSON.stringify(data));
+  if (history.length > MAX_HISTORY) history.shift();
+  const btn = document.getElementById('btnUndo');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+  // localStorage'a yaz
+  localStorage.setItem('devtrack', JSON.stringify(data));
+  const ind = document.getElementById('saveIndicator');
+  if (ind) {
+    ind.style.opacity = '1';
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(() => { ind.style.opacity = '0'; }, 2000);
+  }
+}
+
+function undoAction() {
+  if (!history.length) return;
+  // Son snapshot'a dön
+  const prev = JSON.parse(history.pop());
+  data = prev;
+  localStorage.setItem('devtrack', JSON.stringify(data));
+  const btn = document.getElementById('btnUndo');
+  if (btn && !history.length) { btn.disabled = true; btn.style.opacity = '.4'; }
+  // UI yenile
+  renderProjects();
+  renderBoard(activeProjectId);
+  renderPhases(activeProjectId);
+  const ind = document.getElementById('saveIndicator');
+  if (ind) { ind.style.opacity = '1'; clearTimeout(_saveTimer); _saveTimer = setTimeout(() => { ind.style.opacity = '0'; }, 1500); }
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'devtrack-data.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (!imported.projects || !imported.tasks) { alert('Geçersiz dosya formatı!'); return; }
+      if (!imported.phases) imported.phases = {};
+      data = imported;
+      save();
+      activeProjectId = null;
+      renderProjects();
+      renderBoard(null);
+      renderPhases(null);
+      document.getElementById('activeProjectTitle').textContent = 'Proje Seçin';
+      document.getElementById('btnAddPhase').style.display = 'none';
+      if (data.projects.length > 0) selectProject(data.projects[0].id);
+      alert('✅ Veriler başarıyla yüklendi!');
+    } catch { alert('Dosya okunamadı. Geçerli bir JSON dosyası seçin.'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
@@ -649,6 +734,14 @@ document.getElementById('colorPicker').addEventListener('click', e => {
 // ENTER KEY
 document.getElementById('projectName').addEventListener('keydown', e => { if(e.key==='Enter') saveProject(); });
 document.getElementById('phaseName').addEventListener('keydown', e => { if(e.key==='Enter') savePhase(); });
+
+// CTRL+Z UNDO
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    const anyOpen = document.querySelector('.overlay.open');
+    if (!anyOpen) { e.preventDefault(); undoAction(); }
+  }
+});
 
 // INIT
 renderProjects();
