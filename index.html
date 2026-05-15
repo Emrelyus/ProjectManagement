@@ -978,10 +978,272 @@
       background: #1e2535;
       color: #4b5563
     }
+
+    /* PROJECT DASHBOARD */
+    .dashboard-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #00000090;
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px)
+    }
+    .dashboard-overlay.open { display: flex }
+    .dashboard-modal {
+      background: #161b27;
+      border: 1px solid #2d3748;
+      border-radius: 20px;
+      padding: 32px;
+      width: 680px;
+      max-width: 96vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: fadeIn .25s ease;
+      position: relative
+    }
+    .dash-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #1e2535;
+      border: none;
+      color: #94a3b8;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s
+    }
+    .dash-close:hover { background: #ef444420; color: #ef4444 }
+    .dash-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px
+    }
+    .dash-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+    .dash-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #e2e8f0
+    }
+    .dash-deadline {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px
+    }
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px
+    }
+    .dash-chart-box {
+      background: #1a2032;
+      border: 1px solid #1e2535;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px
+    }
+    .dash-chart-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #4b5563;
+      font-weight: 600;
+      align-self: flex-start
+    }
+    .dash-legend {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+    .dash-legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #94a3b8
+    }
+    .dash-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+    .dash-legend-val {
+      margin-left: auto;
+      font-weight: 600;
+      color: #e2e8f0
+    }
+    .dash-stats {
+      background: #1a2032;
+      border: 1px solid #1e2535;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px
+    }
+    .dash-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+    .dash-stat-label {
+      font-size: 12px;
+      color: #64748b
+    }
+    .dash-stat-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: #e2e8f0
+    }
+    .dash-stat-val.green { color: #10b981 }
+    .dash-stat-val.blue  { color: #6366f1 }
+    .dash-stat-val.amber { color: #f59e0b }
+    .dash-progress-bar {
+      height: 6px;
+      background: #1e2535;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 4px
+    }
+    .dash-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #6366f1, #10b981);
+      transition: width .6s ease
+    }
+    .dash-phases-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #4b5563;
+      font-weight: 600;
+      margin-bottom: 10px
+    }
+    .dash-phase-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: #1a2032;
+      border: 1px solid #1e2535;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: 12px
+    }
+    .dash-phase-name {
+      flex: 1;
+      color: #e2e8f0;
+      font-weight: 500
+    }
+    .dash-phase-bar-wrap {
+      width: 100px;
+      height: 5px;
+      background: #1e2535;
+      border-radius: 3px;
+      overflow: hidden
+    }
+    .dash-phase-bar-fill {
+      height: 100%;
+      border-radius: 3px
+    }
+    .project-title {
+      cursor: pointer;
+      transition: color .2s
+    }
+    .project-title:hover { color: #6366f1 }
+    .project-title-icon {
+      font-size: 11px;
+      color: #4b5563;
+      margin-left: 4px
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- PROJECT DASHBOARD MODAL -->
+  <div class="dashboard-overlay" id="projectDashboard">
+    <div class="dashboard-modal" id="dashboardModal">
+      <button class="dash-close" onclick="closeModal('projectDashboard')"><i class="fas fa-times"></i></button>
+      <div class="dash-header">
+        <div class="dash-dot" id="dashDot"></div>
+        <div>
+          <div class="dash-title" id="dashTitle"></div>
+          <div class="dash-deadline" id="dashDeadline"></div>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-chart-box">
+          <div class="dash-chart-title"><i class="fas fa-chart-pie" style="margin-right:5px"></i>Görev Dağılımı</div>
+          <canvas id="dashDonut" width="160" height="160"></canvas>
+          <div class="dash-legend" id="dashLegend"></div>
+        </div>
+        <div class="dash-stats">
+          <div class="dash-chart-title"><i class="fas fa-chart-bar" style="margin-right:5px"></i>İstatistikler</div>
+          <div>
+            <div class="dash-stat-row">
+              <span class="dash-stat-label">Toplam Görev</span>
+              <span class="dash-stat-val blue" id="dashTotal">0</span>
+            </div>
+          </div>
+          <div>
+            <div class="dash-stat-row">
+              <span class="dash-stat-label">Tamamlanan</span>
+              <span class="dash-stat-val green" id="dashDone">0</span>
+            </div>
+          </div>
+          <div>
+            <div class="dash-stat-row">
+              <span class="dash-stat-label">İşlemde</span>
+              <span class="dash-stat-val amber" id="dashInProgress">0</span>
+            </div>
+          </div>
+          <div>
+            <div class="dash-stat-row">
+              <span class="dash-stat-label">Yapılacak</span>
+              <span class="dash-stat-val" id="dashTodo">0</span>
+            </div>
+          </div>
+          <div style="margin-top:8px">
+            <div class="dash-stat-row" style="margin-bottom:6px">
+              <span class="dash-stat-label">Tamamlanma</span>
+              <span class="dash-stat-val green" id="dashPct">0%</span>
+            </div>
+            <div class="dash-progress-bar">
+              <div class="dash-progress-fill" id="dashProgressFill" style="width:0%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="dash-stat-row">
+              <span class="dash-stat-label">Faz Sayısı</span>
+              <span class="dash-stat-val" id="dashPhaseCount">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-phases-title"><i class="fas fa-list-check" style="margin-right:5px"></i>Proje Fazları</div>
+      <div id="dashPhasesList"></div>
+    </div>
+  </div>
 
   <!-- PROJE MODAL (ekle/düzenle) -->
   <div class="overlay" id="projectModal">
@@ -1113,7 +1375,8 @@
   <main>
     <header>
       <div class="header-left">
-        <span class="project-title" id="activeProjectTitle">Proje Seçin</span>
+        <span class="project-title" id="activeProjectTitle" onclick="openProjectDashboard()" title="Proje özetinı gör">Proje Seçin</span>
+        <i class="fas fa-chart-pie project-title-icon" id="dashIconHint" style="display:none"></i>
       </div>
       <div class="header-right">
         <span class="save-indicator" id="saveIndicator"><i class="fas fa-check-circle"></i> Kaydedildi</span>
@@ -1378,6 +1641,8 @@
       const p = data.projects.find(x => x.id === id);
       document.getElementById('activeProjectTitle').textContent = p ? p.name : '';
       document.getElementById('btnAddPhase').style.display = 'flex';
+      const hint = document.getElementById('dashIconHint');
+      if (hint) hint.style.display = 'inline';
     }
 
     // BOARD
@@ -1617,6 +1882,136 @@
     function openModal(id) { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
     document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
+    // dashboard backdrop click
+    document.getElementById('projectDashboard').addEventListener('click', e => {
+      if (e.target === document.getElementById('projectDashboard')) closeModal('projectDashboard');
+    });
+
+    // PROJECT DASHBOARD
+    function drawDonut(canvas, segments) {
+      const ctx = canvas.getContext('2d');
+      const cx = canvas.width / 2, cy = canvas.height / 2, R = 68, r = 38;
+      const total = segments.reduce((s, x) => s + x.val, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (total === 0) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.arc(cx, cy, r, Math.PI * 2, 0, true);
+        ctx.fillStyle = '#1e2535';
+        ctx.fill();
+        ctx.fillStyle = '#4b5563';
+        ctx.font = 'bold 14px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('0', cx, cy);
+        return;
+      }
+      let angle = -Math.PI / 2;
+      segments.forEach(seg => {
+        const slice = (seg.val / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, R, angle, angle + slice);
+        ctx.closePath();
+        ctx.fillStyle = seg.color;
+        ctx.fill();
+        angle += slice;
+      });
+      // donut hole
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#1a2032';
+      ctx.fill();
+      // center text
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = 'bold 18px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(total, cx, cy - 8);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('Toplam', cx, cy + 10);
+    }
+
+    function openProjectDashboard() {
+      if (!activeProjectId) return;
+      const p = data.projects.find(x => x.id === activeProjectId);
+      if (!p) return;
+      const tasks = data.tasks[activeProjectId] || [];
+      const phases = data.phases[activeProjectId] || [];
+
+      // header
+      document.getElementById('dashDot').style.background = p.color;
+      document.getElementById('dashTitle').textContent = p.name;
+      let dlText = '';
+      if (p.deadline) {
+        const diff = Math.ceil((new Date(p.deadline) - new Date()) / 864e5);
+        const fmted = fmtDate(p.deadline);
+        dlText = diff >= 0 ? `📅 Bitiş: ${fmted} — ${diff} gün kaldı` : `📅 Bitiş: ${fmted} — Süre doldu`;
+      }
+      document.getElementById('dashDeadline').textContent = dlText;
+
+      // stats
+      const done  = tasks.filter(t => t.status === 'tamamlandi').length;
+      const prog  = tasks.filter(t => t.status === 'islemde').length;
+      const todo  = tasks.filter(t => t.status === 'yapilacak').length;
+      const total = tasks.length;
+      const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      document.getElementById('dashTotal').textContent = total;
+      document.getElementById('dashDone').textContent = done;
+      document.getElementById('dashInProgress').textContent = prog;
+      document.getElementById('dashTodo').textContent = todo;
+      document.getElementById('dashPct').textContent = pct + '%';
+      document.getElementById('dashPhaseCount').textContent = phases.length;
+      setTimeout(() => { document.getElementById('dashProgressFill').style.width = pct + '%'; }, 100);
+
+      // donut
+      const segments = [
+        { label: 'Tamamlandı', val: done,  color: '#10b981' },
+        { label: 'İşlemde',    val: prog,  color: '#6366f1' },
+        { label: 'Yapılacak',  val: todo,  color: '#374151' }
+      ];
+      const canvas = document.getElementById('dashDonut');
+      drawDonut(canvas, segments);
+
+      // legend
+      const legend = document.getElementById('dashLegend');
+      legend.innerHTML = segments.map(s => `
+        <div class="dash-legend-row">
+          <div class="dash-legend-dot" style="background:${s.color}"></div>
+          <span>${s.label}</span>
+          <span class="dash-legend-val">${s.val}</span>
+        </div>`).join('');
+
+      // phases list
+      const COLORS = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
+      const phList = document.getElementById('dashPhasesList');
+      if (!phases.length) {
+        phList.innerHTML = '<div style="color:#2d3748;font-size:12px;padding:12px 0">Henüz faz eklenmemiş.</div>';
+      } else {
+        phList.innerHTML = phases.map((ph, i) => {
+          const c = COLORS[i % COLORS.length];
+          const phTasks = tasks.filter(t => t.phaseId === ph.id);
+          const phDone  = phTasks.filter(t => t.status === 'tamamlandi').length;
+          const phPct   = phTasks.length > 0 ? Math.round((phDone / phTasks.length) * 100) : 0;
+          const st = ph.start && ph.end ? phaseStatus(ph.start, ph.end) : null;
+          const stBadge = st ? `<span style="font-size:10px;padding:1px 7px;border-radius:10px;font-weight:600;background:${st.cls==='ps-done'?'#0d2d22':st.cls==='ps-active'?'#1e253580':'#1e2535'};color:${st.cls==='ps-done'?'#10b981':st.cls==='ps-active'?'#6366f1':'#4b5563'}">${st.label}</span>` : '';
+          return `<div class="dash-phase-row">
+            <div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div>
+            <span class="dash-phase-name">${ph.name}</span>
+            ${stBadge}
+            <span style="font-size:11px;color:#64748b">${phDone}/${phTasks.length}</span>
+            <div class="dash-phase-bar-wrap">
+              <div class="dash-phase-bar-fill" style="width:${phPct}%;background:${c}"></div>
+            </div>
+            <span style="font-size:11px;color:#94a3b8;min-width:30px;text-align:right">${phPct}%</span>
+          </div>`;
+        }).join('');
+      }
+
+      openModal('projectDashboard');
+    }
 
     // COLOR PICKER
     document.getElementById('colorPicker').addEventListener('click', e => {
