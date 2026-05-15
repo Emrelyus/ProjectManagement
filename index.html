@@ -1,557 +1,1398 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DevTrack - Proje Takip</title>
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0f1117;color:#e2e8f0;height:100vh;display:flex;overflow:hidden}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevTrack - Proje Takip</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
 
-/* SIDEBAR */
-aside{width:260px;background:#161b27;border-right:1px solid #1e2535;display:flex;flex-direction:column;flex-shrink:0}
-.logo{padding:20px;font-size:1.2rem;font-weight:700;border-bottom:1px solid #1e2535;display:flex;align-items:center;gap:10px;color:#fff}
-.logo i{color:#6366f1}
-.sidebar-section{padding:16px;flex:1;overflow-y:auto}
-.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#4b5563;font-weight:600;margin-bottom:8px}
-.project-list{list-style:none;margin-bottom:12px}
-.project-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;border-left:3px solid transparent;transition:all .2s;color:#94a3b8;position:relative}
-.project-item:hover{background:#1e2535;color:#e2e8f0}
-.project-item.active{background:#1e2535;border-left-color:#6366f1;color:#e2e8f0}
-.project-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.proj-actions{display:flex;gap:2px;opacity:0;transition:opacity .2s;margin-left:auto;flex-shrink:0}
-.project-item:hover .proj-actions{opacity:1}
-.proj-btn{background:none;border:none;cursor:pointer;color:#4b5563;font-size:10px;padding:2px 4px;border-radius:3px;transition:color .2s;font-family:inherit}
-.proj-btn:hover{color:#e2e8f0}
-.week-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;white-space:nowrap;flex-shrink:0}
-.week-ok{background:#0d2d22;color:#10b981}
-.week-warn{background:#2d1f00;color:#f59e0b}
-.week-urgent{background:#2d0f0f;color:#ef4444}
-.week-done{background:#1e2535;color:#4b5563}
-.btn-add-project{width:100%;padding:9px;background:transparent;border:1px dashed #2d3748;border-radius:8px;color:#4b5563;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;font-family:'Inter',sans-serif}
-.btn-add-project:hover{border-color:#6366f1;color:#6366f1}
-.sidebar-footer{padding:16px;border-top:1px solid #1e2535;display:flex;align-items:center;gap:10px}
-.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.user-name{font-size:13px;font-weight:500;cursor:pointer;border-radius:4px;padding:1px 4px;transition:background .2s}
-.user-name:hover{background:#1e2535}
-.user-role{font-size:11px;color:#4b5563;cursor:pointer;border-radius:4px;padding:1px 4px;transition:background .2s}
-.user-role:hover{background:#1e2535}
-.user-input{background:#0f1117;border:1px solid #6366f1;border-radius:4px;padding:2px 6px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:13px;outline:none;width:140px}
-.user-input.small{font-size:11px;color:#94a3b8;width:140px}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      height: 100vh;
+      display: flex;
+      overflow: hidden
+    }
 
-/* MAIN */
-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-header{height:60px;background:#161b27;border-bottom:1px solid #1e2535;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
-.header-left{display:flex;align-items:center;gap:14px}
-.project-title{font-size:16px;font-weight:600}
-.btn-new-task{background:#6366f1;color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:500;transition:background .2s}
-.btn-new-task:hover{background:#5254cc}
-.header-right{display:flex;align-items:center;gap:8px}
-.btn-io{background:#1e2535;border:1px solid #2d3748;color:#94a3b8;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:500;transition:all .2s}
-.btn-io:hover{border-color:#6366f1;color:#6366f1}
-.save-indicator{font-size:11px;color:#10b981;display:flex;align-items:center;gap:4px;opacity:0;transition:opacity .5s}
+    /* SIDEBAR */
+    aside {
+      width: 260px;
+      background: #161b27;
+      border-right: 1px solid #1e2535;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0
+    }
 
-/* BOARD */
-.board{flex:1;display:flex;gap:20px;padding:24px;overflow-x:auto;overflow-y:hidden}
-.column{width:300px;flex-shrink:0;display:flex;flex-direction:column;background:#161b27;border-radius:12px;border:1px solid #1e2535;overflow:hidden}
-.col-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e2535}
-.col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:8px}
-.col-add-task-btn{width:100%;padding:9px;background:transparent;border:1px dashed #2d3748;border-radius:8px;color:#4b5563;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;font-family:'Inter',sans-serif;margin-top:4px;flex-shrink:0}
-.col-add-task-btn:hover{border-color:#6366f1;color:#6366f1}
-.col-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
-.col-yapilacak .col-title{color:#94a3b8}.col-yapilacak .col-badge{background:#1e2535;color:#94a3b8}
-.col-islemde .col-title{color:#6366f1}.col-islemde .col-badge{background:#1e253580;color:#6366f1}
-.col-tamamlandi .col-title{color:#10b981}.col-tamamlandi .col-badge{background:#0d2d2280;color:#10b981}
-.col-bar{height:3px}
-.col-yapilacak .col-bar{background:#374151}
-.col-islemde .col-bar{background:#6366f1}
-.col-tamamlandi .col-bar{background:#10b981}
-.col-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:120px}
-.col-body.drag-over{background:#1e253560;border-radius:8px}
+    .logo {
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff
+    }
 
-/* CARDS */
-.card{background:#1a2032;border:1px solid #1e2535;border-radius:10px;padding:14px;cursor:grab;transition:all .2s;position:relative}
-.card:hover{border-color:#6366f180;transform:translateY(-1px);box-shadow:0 4px 20px #00000040}
-.card.dragging{opacity:.4;cursor:grabbing}
-.card-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.tag-feature{color:#6366f1}.tag-bug{color:#ef4444}.tag-refactor{color:#10b981}.tag-task{color:#f59e0b}.tag-design{color:#ec4899}
-.card-title{font-size:13px;font-weight:600;line-height:1.4;color:#e2e8f0;margin-bottom:5px}
-.card-desc{font-size:11px;color:#64748b;line-height:1.5;margin-bottom:10px;white-space:pre-wrap}
-.card-duration{font-size:11px;color:#6366f1;display:flex;align-items:center;gap:4px}
-.card-phase-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;display:inline-flex;align-items:center;gap:4px;margin-bottom:8px}
-.card-footer{display:flex;justify-content:space-between;align-items:center}
-.card-meta{font-size:11px;color:#4b5563;display:flex;align-items:center;gap:4px}
-.card-actions{display:flex;gap:4px;opacity:0;transition:opacity .2s}
-.card:hover .card-actions{opacity:1}
-.card-del,.card-edit{background:none;border:none;cursor:pointer;font-size:12px;padding:3px 6px;border-radius:4px;transition:color .2s}
-.card-del{color:#4b5563}.card-del:hover{color:#ef4444}
-.card-edit{color:#4b5563}.card-edit:hover{color:#6366f1}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#2d3748;font-size:13px;gap:6px;padding:20px;text-align:center;min-height:100px}
-.empty-state i{font-size:24px}
+    .logo i {
+      color: #6366f1
+    }
 
-/* MODAL */
-.overlay{display:none;position:fixed;inset:0;background:#00000080;z-index:100;align-items:center;justify-content:center}
-.overlay.open{display:flex}
-.modal{background:#1a2032;border:1px solid #2d3748;border-radius:16px;padding:28px;width:420px;max-width:95vw;animation:fadeIn .2s ease}
-@keyframes fadeIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-.modal h2{font-size:16px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-.modal h2 i{color:#6366f1}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:500}
-.form-group input,.form-group select,.form-group textarea{width:100%;background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:9px 12px;color:#e2e8f0;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border .2s}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#6366f1}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-group select option{background:#1a2032}
-.modal-btns{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
-.btn-cancel{background:#1e2535;border:none;color:#94a3b8;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px}
-.btn-submit{background:#6366f1;border:none;color:#fff;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;transition:background .2s}
-.btn-submit:hover{background:#5254cc}
+    .sidebar-section {
+      padding: 16px;
+      flex: 1;
+      overflow-y: auto
+    }
 
-/* COLORS */
-.colors{display:flex;gap:8px;flex-wrap:wrap}
-.color-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border .2s}
-.color-dot.selected{border-color:#fff}
+    .sidebar-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4b5563;
+      font-weight: 600;
+      margin-bottom: 8px
+    }
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#2d3748;border-radius:3px}
+    .project-list {
+      list-style: none;
+      margin-bottom: 12px
+    }
 
-/* PHASES PANEL */
-.content-area{flex:1;display:flex;overflow:hidden}
-.phases-panel{width:270px;flex-shrink:0;background:#161b27;border-left:1px solid #1e2535;display:flex;flex-direction:column}
-.phases-panel-header{padding:14px 16px;border-bottom:1px solid #1e2535;display:flex;align-items:center;justify-content:space-between}
-.phases-panel-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:#6366f1;display:flex;align-items:center;gap:8px}
-.btn-add-phase{background:#6366f120;border:none;color:#6366f1;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:background .2s;display:none}
-.btn-add-phase:hover{background:#6366f140}
-.phases-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
-.phase-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#2d3748;font-size:12px;gap:6px;text-align:center}
-.phase-empty i{font-size:28px}
-.phase-item{background:#1a2032;border:1px solid #1e2535;border-radius:10px;padding:12px;position:relative;transition:border .2s}
-.phase-item:hover{border-color:#6366f140}
-.phase-connector{width:2px;height:10px;background:#2d3748;margin:0 auto 0 17px}
-.phase-dot-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.phase-name{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
-.phase-dates{display:flex;gap:6px;margin-left:18px;margin-top:2px}
-.phase-date-badge{font-size:10px;padding:2px 7px;border-radius:4px;background:#1e2535;color:#94a3b8;display:flex;align-items:center;gap:4px}
-.phase-actions{display:flex;gap:2px;position:absolute;top:8px;right:8px;opacity:0;transition:opacity .2s}
-.phase-item:hover .phase-actions{opacity:1}
-.phase-btn{background:none;border:none;cursor:pointer;font-size:11px;padding:3px 5px;border-radius:4px;transition:color .2s}
-.phase-btn-edit{color:#4b5563}.phase-btn-edit:hover{color:#6366f1}
-.phase-btn-del{color:#4b5563}.phase-btn-del:hover{color:#ef4444}
-.phase-status{font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;margin-left:auto}
-.ps-done{background:#0d2d22;color:#10b981}
-.ps-active{background:#1e253580;color:#6366f1}
-.ps-pending{background:#1e2535;color:#4b5563}
-</style>
+    .project-item {
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 3px solid transparent;
+      transition: all .2s;
+      color: #94a3b8;
+      position: relative
+    }
+
+    .project-item:hover {
+      background: #1e2535;
+      color: #e2e8f0
+    }
+
+    .project-item.active {
+      background: #1e2535;
+      border-left-color: #6366f1;
+      color: #e2e8f0
+    }
+
+    .project-item .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .proj-actions {
+      display: flex;
+      gap: 2px;
+      opacity: 0;
+      transition: opacity .2s;
+      margin-left: auto;
+      flex-shrink: 0
+    }
+
+    .project-item:hover .proj-actions {
+      opacity: 1
+    }
+
+    .proj-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #4b5563;
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 3px;
+      transition: color .2s;
+      font-family: inherit
+    }
+
+    .proj-btn:hover {
+      color: #e2e8f0
+    }
+
+    .week-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .week-ok {
+      background: #0d2d22;
+      color: #10b981
+    }
+
+    .week-warn {
+      background: #2d1f00;
+      color: #f59e0b
+    }
+
+    .week-urgent {
+      background: #2d0f0f;
+      color: #ef4444
+    }
+
+    .week-done {
+      background: #1e2535;
+      color: #4b5563
+    }
+
+    .btn-add-project {
+      width: 100%;
+      padding: 9px;
+      background: transparent;
+      border: 1px dashed #2d3748;
+      border-radius: 8px;
+      color: #4b5563;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all .2s;
+      font-family: 'Inter', sans-serif
+    }
+
+    .btn-add-project:hover {
+      border-color: #6366f1;
+      color: #6366f1
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 1px 4px;
+      transition: background .2s
+    }
+
+    .user-name:hover {
+      background: #1e2535
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: #4b5563;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 1px 4px;
+      transition: background .2s
+    }
+
+    .user-role:hover {
+      background: #1e2535
+    }
+
+    .user-input {
+      background: #0f1117;
+      border: 1px solid #6366f1;
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      width: 140px
+    }
+
+    .user-input.small {
+      font-size: 11px;
+      color: #94a3b8;
+      width: 140px
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    header {
+      height: 60px;
+      background: #161b27;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .project-title {
+      font-size: 16px;
+      font-weight: 600
+    }
+
+    .btn-new-task {
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      transition: background .2s
+    }
+
+    .btn-new-task:hover {
+      background: #5254cc
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .btn-io {
+      background: #1e2535;
+      border: 1px solid #2d3748;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      transition: all .2s
+    }
+
+    .btn-io:hover {
+      border-color: #6366f1;
+      color: #6366f1
+    }
+
+    .save-indicator {
+      font-size: 11px;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity .5s
+    }
+
+    /* BOARD */
+    .board {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      padding: 24px;
+      overflow-x: auto;
+      overflow-y: hidden
+    }
+
+    .column {
+      width: 300px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: #161b27;
+      border-radius: 12px;
+      border: 1px solid #1e2535;
+      overflow: hidden
+    }
+
+    .col-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e2535
+    }
+
+    .col-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .col-add-task-btn {
+      width: 100%;
+      padding: 9px;
+      background: transparent;
+      border: 1px dashed #2d3748;
+      border-radius: 8px;
+      color: #4b5563;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all .2s;
+      font-family: 'Inter', sans-serif;
+      margin-top: 4px;
+      flex-shrink: 0
+    }
+
+    .col-add-task-btn:hover {
+      border-color: #6366f1;
+      color: #6366f1
+    }
+
+    .col-badge {
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600
+    }
+
+    .col-yapilacak .col-title {
+      color: #94a3b8
+    }
+
+    .col-yapilacak .col-badge {
+      background: #1e2535;
+      color: #94a3b8
+    }
+
+    .col-islemde .col-title {
+      color: #6366f1
+    }
+
+    .col-islemde .col-badge {
+      background: #1e253580;
+      color: #6366f1
+    }
+
+    .col-tamamlandi .col-title {
+      color: #10b981
+    }
+
+    .col-tamamlandi .col-badge {
+      background: #0d2d2280;
+      color: #10b981
+    }
+
+    .col-bar {
+      height: 3px
+    }
+
+    .col-yapilacak .col-bar {
+      background: #374151
+    }
+
+    .col-islemde .col-bar {
+      background: #6366f1
+    }
+
+    .col-tamamlandi .col-bar {
+      background: #10b981
+    }
+
+    .col-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 120px
+    }
+
+    .col-body.drag-over {
+      background: #1e253560;
+      border-radius: 8px
+    }
+
+    /* CARDS */
+    .card {
+      background: #1a2032;
+      border: 1px solid #1e2535;
+      border-radius: 10px;
+      padding: 14px;
+      cursor: grab;
+      transition: all .2s;
+      position: relative
+    }
+
+    .card:hover {
+      border-color: #6366f180;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px #00000040
+    }
+
+    .card.dragging {
+      opacity: .4;
+      cursor: grabbing
+    }
+
+    .card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px
+    }
+
+    .tag-feature {
+      color: #6366f1
+    }
+
+    .tag-bug {
+      color: #ef4444
+    }
+
+    .tag-refactor {
+      color: #10b981
+    }
+
+    .tag-task {
+      color: #f59e0b
+    }
+
+    .tag-design {
+      color: #ec4899
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #e2e8f0;
+      margin-bottom: 5px
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      white-space: pre-wrap
+    }
+
+    .card-duration {
+      font-size: 11px;
+      color: #6366f1;
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .card-phase-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 8px
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #4b5563;
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity .2s
+    }
+
+    .card:hover .card-actions {
+      opacity: 1
+    }
+
+    .card-del,
+    .card-edit {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      transition: color .2s
+    }
+
+    .card-del {
+      color: #4b5563
+    }
+
+    .card-del:hover {
+      color: #ef4444
+    }
+
+    .card-edit {
+      color: #4b5563
+    }
+
+    .card-edit:hover {
+      color: #6366f1
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      color: #2d3748;
+      font-size: 13px;
+      gap: 6px;
+      padding: 20px;
+      text-align: center;
+      min-height: 100px
+    }
+
+    .empty-state i {
+      font-size: 24px
+    }
+
+    /* MODAL */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #00000080;
+      z-index: 100;
+      align-items: center;
+      justify-content: center
+    }
+
+    .overlay.open {
+      display: flex
+    }
+
+    .modal {
+      background: #1a2032;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 28px;
+      width: 420px;
+      max-width: 95vw;
+      animation: fadeIn .2s ease
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(.96)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .modal h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .modal h2 i {
+      color: #6366f1
+    }
+
+    .form-group {
+      margin-bottom: 14px
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      font-weight: 500
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border .2s
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #6366f1
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px
+    }
+
+    .form-group select option {
+      background: #1a2032
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: flex-end
+    }
+
+    .btn-cancel {
+      background: #1e2535;
+      border: none;
+      color: #94a3b8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px
+    }
+
+    .btn-submit {
+      background: #6366f1;
+      border: none;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background .2s
+    }
+
+    .btn-submit:hover {
+      background: #5254cc
+    }
+
+    /* COLORS */
+    .colors {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .color-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border .2s
+    }
+
+    .color-dot.selected {
+      border-color: #fff
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2d3748;
+      border-radius: 3px
+    }
+
+    /* PHASES PANEL */
+    .content-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden
+    }
+
+    .phases-panel {
+      width: 540px;
+      flex-shrink: 0;
+      background: #161b27;
+      border-left: 1px solid #1e2535;
+      display: flex;
+      flex-direction: column
+    }
+
+    .phases-panel-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1e2535;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .phases-panel-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #6366f1;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .btn-add-phase {
+      background: #6366f120;
+      border: none;
+      color: #6366f1;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      transition: background .2s;
+      display: none
+    }
+
+    .btn-add-phase:hover {
+      background: #6366f140
+    }
+
+    .phases-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .phase-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      color: #2d3748;
+      font-size: 12px;
+      gap: 6px;
+      text-align: center
+    }
+
+    .phase-empty i {
+      font-size: 28px
+    }
+
+    .phase-item {
+      background: #1a2032;
+      border: 1px solid #1e2535;
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+      transition: border .2s
+    }
+
+    .phase-item:hover {
+      border-color: #6366f140
+    }
+
+    .phase-connector {
+      width: 2px;
+      height: 10px;
+      background: #2d3748;
+      margin: 0 auto 0 17px
+    }
+
+    .phase-dot-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px
+    }
+
+    .phase-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .phase-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      flex: 1
+    }
+
+    .phase-dates {
+      display: flex;
+      gap: 6px;
+      margin-left: 18px;
+      margin-top: 2px
+    }
+
+    .phase-date-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #1e2535;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .phase-actions {
+      display: flex;
+      gap: 2px;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      opacity: 0;
+      transition: opacity .2s
+    }
+
+    .phase-item:hover .phase-actions {
+      opacity: 1
+    }
+
+    .phase-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 11px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      transition: color .2s
+    }
+
+    .phase-btn-edit {
+      color: #4b5563
+    }
+
+    .phase-btn-edit:hover {
+      color: #6366f1
+    }
+
+    .phase-btn-del {
+      color: #4b5563
+    }
+
+    .phase-btn-del:hover {
+      color: #ef4444
+    }
+
+    .phase-status {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-left: auto
+    }
+
+    .ps-done {
+      background: #0d2d22;
+      color: #10b981
+    }
+
+    .ps-active {
+      background: #1e253580;
+      color: #6366f1
+    }
+
+    .ps-pending {
+      background: #1e2535;
+      color: #4b5563
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- PROJE MODAL (ekle/düzenle) -->
-<div class="overlay" id="projectModal">
-  <div class="modal">
-    <h2 id="projModalTitle"><i class="fas fa-folder-plus"></i> Yeni Proje</h2>
-    <input type="hidden" id="editingProjectId">
-    <div class="form-group">
-      <label>Proje Adı</label>
-      <input type="text" id="projectName" placeholder="Proje adını girin...">
-    </div>
-    <div class="form-group">
-      <label>Bitiş Tarihi</label>
-      <input type="date" id="projectDeadline">
-    </div>
-    <div class="form-group">
-      <label>Renk</label>
-      <div class="colors" id="colorPicker">
-        <div class="color-dot selected" style="background:#6366f1" data-color="#6366f1"></div>
-        <div class="color-dot" style="background:#10b981" data-color="#10b981"></div>
-        <div class="color-dot" style="background:#f59e0b" data-color="#f59e0b"></div>
-        <div class="color-dot" style="background:#ef4444" data-color="#ef4444"></div>
-        <div class="color-dot" style="background:#ec4899" data-color="#ec4899"></div>
-        <div class="color-dot" style="background:#06b6d4" data-color="#06b6d4"></div>
+  <!-- PROJE MODAL (ekle/düzenle) -->
+  <div class="overlay" id="projectModal">
+    <div class="modal">
+      <h2 id="projModalTitle"><i class="fas fa-folder-plus"></i> Yeni Proje</h2>
+      <input type="hidden" id="editingProjectId">
+      <div class="form-group">
+        <label>Proje Adı</label>
+        <input type="text" id="projectName" placeholder="Proje adını girin...">
+      </div>
+      <div class="form-group">
+        <label>Bitiş Tarihi</label>
+        <input type="date" id="projectDeadline">
+      </div>
+      <div class="form-group">
+        <label>Renk</label>
+        <div class="colors" id="colorPicker">
+          <div class="color-dot selected" style="background:#6366f1" data-color="#6366f1"></div>
+          <div class="color-dot" style="background:#10b981" data-color="#10b981"></div>
+          <div class="color-dot" style="background:#f59e0b" data-color="#f59e0b"></div>
+          <div class="color-dot" style="background:#ef4444" data-color="#ef4444"></div>
+          <div class="color-dot" style="background:#ec4899" data-color="#ec4899"></div>
+          <div class="color-dot" style="background:#06b6d4" data-color="#06b6d4"></div>
+        </div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal('projectModal')">İptal</button>
+        <button class="btn-submit" id="projSubmitBtn" onclick="saveProject()">Oluştur</button>
       </div>
     </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal('projectModal')">İptal</button>
-      <button class="btn-submit" id="projSubmitBtn" onclick="saveProject()">Oluştur</button>
-    </div>
   </div>
-</div>
 
-<!-- GÖREV EKLE MODAL -->
-<div class="overlay" id="taskModal">
-  <div class="modal">
-    <h2 id="taskModalTitle"><i class="fas fa-plus-circle"></i> Yeni Görev</h2>
-    <input type="hidden" id="editingTaskId">
-    <div class="form-group">
-      <label>Görev Başlığı</label>
-      <input type="text" id="taskTitle" placeholder="Kısa ve net bir başlık...">
-    </div>
-    <div class="form-group">
-      <label>Açıklama</label>
-      <textarea id="taskText" placeholder="Görev detaylarını buraya yazın..." style="min-height:70px"></textarea>
-    </div>
-    <div style="display:flex;gap:12px">
-      <div class="form-group" style="flex:1">
-        <label>Etiket</label>
-        <select id="taskTag">
-          <option value="task">Görev</option>
-          <option value="feature">Feature</option>
-          <option value="bug">Bug</option>
-          <option value="refactor">Refactor</option>
-          <option value="design">Design</option>
+  <!-- GÖREV EKLE MODAL -->
+  <div class="overlay" id="taskModal">
+    <div class="modal">
+      <h2 id="taskModalTitle"><i class="fas fa-plus-circle"></i> Yeni Görev</h2>
+      <input type="hidden" id="editingTaskId">
+      <div class="form-group">
+        <label>Görev Başlığı</label>
+        <input type="text" id="taskTitle" placeholder="Kısa ve net bir başlık...">
+      </div>
+      <div class="form-group">
+        <label>Açıklama</label>
+        <textarea id="taskText" placeholder="Görev detaylarını buraya yazın..." style="min-height:70px"></textarea>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div class="form-group" style="flex:1">
+          <label>Etiket</label>
+          <select id="taskTag">
+            <option value="task">Görev</option>
+            <option value="feature">Feature</option>
+            <option value="bug">Bug</option>
+            <option value="refactor">Refactor</option>
+            <option value="design">Design</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:1">
+          <label>Öncelik</label>
+          <select id="taskPriority">
+            <option value="normal">Normal</option>
+            <option value="high">Yüksek</option>
+            <option value="low">Düşük</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Görev Süresi (gün)</label>
+        <input type="number" id="taskDuration" placeholder="Örn: 3" min="1" max="365">
+      </div>
+      <div class="form-group">
+        <label>Proje Adımı</label>
+        <select id="taskPhase">
+          <option value="">— Bağlı değil —</option>
         </select>
       </div>
-      <div class="form-group" style="flex:1">
-        <label>Öncelik</label>
-        <select id="taskPriority">
-          <option value="normal">Normal</option>
-          <option value="high">Yüksek</option>
-          <option value="low">Düşük</option>
-        </select>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal('taskModal')">İptal</button>
+        <button class="btn-submit" id="taskSubmitBtn" onclick="saveTask()">Ekle</button>
       </div>
     </div>
-    <div class="form-group">
-      <label>Görev Süresi (gün)</label>
-      <input type="number" id="taskDuration" placeholder="Örn: 3" min="1" max="365">
-    </div>
-    <div class="form-group">
-      <label>Proje Adımı</label>
-      <select id="taskPhase">
-        <option value="">— Bağlı değil —</option>
-      </select>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal('taskModal')">İptal</button>
-      <button class="btn-submit" id="taskSubmitBtn" onclick="saveTask()">Ekle</button>
-    </div>
   </div>
-</div>
 
-<aside>
-  <div class="logo"><i class="fas fa-layer-group"></i> DevTrack</div>
-  <div class="sidebar-section">
-    <p class="sidebar-label">Projeler</p>
-    <ul class="project-list" id="projectList"></ul>
-    <button class="btn-add-project" onclick="openNewProjectModal()">
-      <i class="fas fa-plus"></i> Proje Ekle
-    </button>
-  </div>
-  <div class="sidebar-footer">
-    <div class="avatar" id="userAvatar">?</div>
-    <div style="flex:1;min-width:0">
-      <div class="user-name" id="userNameDisplay" onclick="editUserField('name')" title="Düzenlmek için tıkla">İsim Soyisim</div>
-      <div class="user-role" id="userRoleDisplay" onclick="editUserField('role')" title="Düzenlmek için tıkla">Göreviniz</div>
-    </div>
-  </div>
-</aside>
-
-<!-- ADIM MODAL -->
-<div class="overlay" id="phaseModal">
-  <div class="modal">
-    <h2 id="phaseModalTitle"><i class="fas fa-flag"></i> Yeni Adım</h2>
-    <input type="hidden" id="editingPhaseId">
-    <div class="form-group">
-      <label>Adım Adı</label>
-      <input type="text" id="phaseName" placeholder="Örn: Fizibilite, Tasarım...">
-    </div>
-    <div style="display:flex;gap:12px">
-      <div class="form-group" style="flex:1">
-        <label>Başlangıç</label>
-        <input type="date" id="phaseStart">
-      </div>
-      <div class="form-group" style="flex:1">
-        <label>Bitiş</label>
-        <input type="date" id="phaseEnd">
-      </div>
-    </div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal('phaseModal')">İptal</button>
-      <button class="btn-submit" id="phaseSubmitBtn" onclick="savePhase()">Ekle</button>
-    </div>
-  </div>
-</div>
-
-<main>
-  <header>
-    <div class="header-left">
-      <span class="project-title" id="activeProjectTitle">Proje Seçin</span>
-    </div>
-    <div class="header-right">
-      <span class="save-indicator" id="saveIndicator"><i class="fas fa-check-circle"></i> Kaydedildi</span>
-      <button class="btn-io" id="btnUndo" onclick="undoAction()" title="Geri Al (Ctrl+Z)" disabled style="opacity:.4">
-        <i class="fas fa-rotate-left"></i> Geri Al
+  <aside>
+    <div class="logo"><i class="fas fa-layer-group"></i> DevTrack</div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Projeler</p>
+      <ul class="project-list" id="projectList"></ul>
+      <button class="btn-add-project" onclick="openNewProjectModal()">
+        <i class="fas fa-plus"></i> Proje Ekle
       </button>
-      <button class="btn-io" onclick="exportData()" title="Verileri JSON olarak indir">
-        <i class="fas fa-download"></i> Dışa Aktar
-      </button>
-      <button class="btn-io" onclick="document.getElementById('importFile').click()" title="JSON dosyasından yükle">
-        <i class="fas fa-upload"></i> İçe Aktar
-      </button>
-      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
     </div>
-  </header>
-  <div class="content-area">
-    <div class="board" id="board">
-      <div style="display:flex;align-items:center;justify-content:center;flex:1;color:#2d3748;flex-direction:column;gap:10px">
-        <i class="fas fa-diagram-project" style="font-size:48px"></i>
-        <p style="font-size:14px">Soldaki menüden bir proje seçin veya oluşturun</p>
+    <div class="sidebar-footer">
+      <div class="avatar" id="userAvatar">?</div>
+      <div style="flex:1;min-width:0">
+        <div class="user-name" id="userNameDisplay" onclick="editUserField('name')" title="Düzenlmek için tıkla">İsim
+          Soyisim</div>
+        <div class="user-role" id="userRoleDisplay" onclick="editUserField('role')" title="Düzenlmek için tıkla">
+          Göreviniz</div>
       </div>
     </div>
-    <div class="phases-panel" id="phasesPanel">
-      <div class="phases-panel-header">
-        <div class="phases-panel-title"><i class="fas fa-list-check"></i> Proje Adımları</div>
-        <button class="btn-add-phase" id="btnAddPhase" onclick="openNewPhaseModal()"><i class="fas fa-plus"></i> Adım</button>
+  </aside>
+
+  <!-- ADIM MODAL -->
+  <div class="overlay" id="phaseModal">
+    <div class="modal">
+      <h2 id="phaseModalTitle"><i class="fas fa-flag"></i> Yeni Adım</h2>
+      <input type="hidden" id="editingPhaseId">
+      <div class="form-group">
+        <label>Adım Adı</label>
+        <input type="text" id="phaseName" placeholder="Örn: Fizibilite, Tasarım...">
       </div>
-      <div class="phases-list" id="phasesList">
-        <div class="phase-empty"><i class="fas fa-flag"></i><span>Proje seçin</span></div>
+      <div style="display:flex;gap:12px">
+        <div class="form-group" style="flex:1">
+          <label>Başlangıç</label>
+          <input type="date" id="phaseStart">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label>Bitiş</label>
+          <input type="date" id="phaseEnd">
+        </div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal('phaseModal')">İptal</button>
+        <button class="btn-submit" id="phaseSubmitBtn" onclick="savePhase()">Ekle</button>
       </div>
     </div>
   </div>
-</main>
 
-<script>
-const COLORS = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
-const TAGS = {task:'Görev',feature:'Feature',bug:'Bug',refactor:'Refactor',design:'Design'};
-const PRIORITY_LABELS = {high:'🔴 Yüksek',normal:'⚪ Normal',low:'🔵 Düşük'};
+  <main>
+    <header>
+      <div class="header-left">
+        <span class="project-title" id="activeProjectTitle">Proje Seçin</span>
+      </div>
+      <div class="header-right">
+        <span class="save-indicator" id="saveIndicator"><i class="fas fa-check-circle"></i> Kaydedildi</span>
+        <button class="btn-io" id="btnUndo" onclick="undoAction()" title="Geri Al (Ctrl+Z)" disabled style="opacity:.4">
+          <i class="fas fa-rotate-left"></i> Geri Al
+        </button>
+        <button class="btn-io" onclick="exportData()" title="Verileri JSON olarak indir">
+          <i class="fas fa-download"></i> Dışa Aktar
+        </button>
+        <button class="btn-io" onclick="document.getElementById('importFile').click()" title="JSON dosyasından yükle">
+          <i class="fas fa-upload"></i> İçe Aktar
+        </button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      </div>
+    </header>
+    <div class="content-area">
+      <div class="board" id="board">
+        <div
+          style="display:flex;align-items:center;justify-content:center;flex:1;color:#2d3748;flex-direction:column;gap:10px">
+          <i class="fas fa-diagram-project" style="font-size:48px"></i>
+          <p style="font-size:14px">Soldaki menüden bir proje seçin veya oluşturun</p>
+        </div>
+      </div>
+      <div class="phases-panel" id="phasesPanel">
+        <div class="phases-panel-header">
+          <div class="phases-panel-title"><i class="fas fa-list-check"></i> Proje Adımları</div>
+          <button class="btn-add-phase" id="btnAddPhase" onclick="openNewPhaseModal()"><i class="fas fa-plus"></i>
+            Adım</button>
+        </div>
+        <div class="phases-list" id="phasesList">
+          <div class="phase-empty"><i class="fas fa-flag"></i><span>Proje seçin</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-let data = JSON.parse(localStorage.getItem('devtrack') || '{"projects":[],"tasks":{},"phases":{}}');
-if (!data.phases) data.phases = {};
-let activeProjectId = null;
-let selectedColor = '#6366f1';
-let draggedId = null;
+  <script>
+    const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
+    const TAGS = { task: 'Görev', feature: 'Feature', bug: 'Bug', refactor: 'Refactor', design: 'Design' };
+    const PRIORITY_LABELS = { high: '🔴 Yüksek', normal: '⚪ Normal', low: '🔵 Düşük' };
 
-const MAX_HISTORY = 30;
-let history = [];
-let _saveTimer = null;
+    let data = JSON.parse(localStorage.getItem('devtrack') || '{"projects":[],"tasks":{},"phases":{}}');
+    if (!data.phases) data.phases = {};
+    let activeProjectId = null;
+    let selectedColor = '#6366f1';
+    let draggedId = null;
 
-function save() {
-  // Snapshot al
-  history.push(JSON.stringify(data));
-  if (history.length > MAX_HISTORY) history.shift();
-  const btn = document.getElementById('btnUndo');
-  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
-  // localStorage'a yaz
-  localStorage.setItem('devtrack', JSON.stringify(data));
-  const ind = document.getElementById('saveIndicator');
-  if (ind) {
-    ind.style.opacity = '1';
-    clearTimeout(_saveTimer);
-    _saveTimer = setTimeout(() => { ind.style.opacity = '0'; }, 2000);
-  }
-}
+    const MAX_HISTORY = 30;
+    let history = [];
+    let _saveTimer = null;
 
-function undoAction() {
-  if (!history.length) return;
-  // Son snapshot'a dön
-  const prev = JSON.parse(history.pop());
-  data = prev;
-  localStorage.setItem('devtrack', JSON.stringify(data));
-  const btn = document.getElementById('btnUndo');
-  if (btn && !history.length) { btn.disabled = true; btn.style.opacity = '.4'; }
-  // UI yenile
-  renderProjects();
-  renderBoard(activeProjectId);
-  renderPhases(activeProjectId);
-  const ind = document.getElementById('saveIndicator');
-  if (ind) { ind.style.opacity = '1'; clearTimeout(_saveTimer); _saveTimer = setTimeout(() => { ind.style.opacity = '0'; }, 1500); }
-}
+    function save() {
+      // Snapshot al
+      history.push(JSON.stringify(data));
+      if (history.length > MAX_HISTORY) history.shift();
+      const btn = document.getElementById('btnUndo');
+      if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+      // localStorage'a yaz
+      localStorage.setItem('devtrack', JSON.stringify(data));
+      const ind = document.getElementById('saveIndicator');
+      if (ind) {
+        ind.style.opacity = '1';
+        clearTimeout(_saveTimer);
+        _saveTimer = setTimeout(() => { ind.style.opacity = '0'; }, 2000);
+      }
+    }
 
-function exportData() {
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'devtrack-data.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-function importData(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const imported = JSON.parse(ev.target.result);
-      if (!imported.projects || !imported.tasks) { alert('Geçersiz dosya formatı!'); return; }
-      if (!imported.phases) imported.phases = {};
-      data = imported;
-      save();
-      activeProjectId = null;
+    function undoAction() {
+      if (!history.length) return;
+      // Son snapshot'a dön
+      const prev = JSON.parse(history.pop());
+      data = prev;
+      localStorage.setItem('devtrack', JSON.stringify(data));
+      const btn = document.getElementById('btnUndo');
+      if (btn && !history.length) { btn.disabled = true; btn.style.opacity = '.4'; }
+      // UI yenile
       renderProjects();
-      renderBoard(null);
-      renderPhases(null);
-      document.getElementById('activeProjectTitle').textContent = 'Proje Seçin';
-      document.getElementById('btnAddPhase').style.display = 'none';
-      if (data.projects.length > 0) selectProject(data.projects[0].id);
-      alert('✅ Veriler başarıyla yüklendi!');
-    } catch { alert('Dosya okunamadı. Geçerli bir JSON dosyası seçin.'); }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-}
+      renderBoard(activeProjectId);
+      renderPhases(activeProjectId);
+      const ind = document.getElementById('saveIndicator');
+      if (ind) { ind.style.opacity = '1'; clearTimeout(_saveTimer); _saveTimer = setTimeout(() => { ind.style.opacity = '0'; }, 1500); }
+    }
 
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+    function exportData() {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'devtrack-data.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
 
-// USER
-let userProfile = JSON.parse(localStorage.getItem('devtrack_user') || '{"name":"","role":""}');
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          // UTF-8 BOM (\uFEFF) ve yorum satırlarını temizle
+          let raw = ev.target.result;
+          raw = raw.replace(/^\uFEFF/, '');                          // BOM sil
+          raw = raw.replace(/\/\*[\s\S]*?\*\//g, '');               // /* ... */ yorumları sil
+          raw = raw.replace(/\/\/[^\n\r]*/g, '');                   // // yorumları sil
+          raw = raw.replace(/,(\s*[\]}])/g, '$1');                  // trailing comma düzelt
+          const imported = JSON.parse(raw);
+          if (!imported.projects || !imported.tasks) { alert('Geçersiz dosya formatı!'); return; }
+          if (!imported.phases) imported.phases = {};
+          data = imported;
+          save();
+          activeProjectId = null;
+          renderProjects();
+          renderBoard(null);
+          renderPhases(null);
+          document.getElementById('activeProjectTitle').textContent = 'Proje Seçin';
+          document.getElementById('btnAddPhase').style.display = 'none';
+          if (data.projects.length > 0) selectProject(data.projects[0].id);
+          alert('✅ Veriler başarıyla yüklendi!');
+        } catch (err) { alert('Dosya okunamadı.\n\nHata: ' + err.message); }
+      };
+      reader.readAsText(file, 'UTF-8');
+      e.target.value = '';
+    }
 
-function getInitials(name) {
-  const parts = name.trim().split(' ').filter(Boolean);
-  if (!parts.length) return '?';
-  return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
-}
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
-function initUser() {
-  const nameEl = document.getElementById('userNameDisplay');
-  const roleEl = document.getElementById('userRoleDisplay');
-  const avatarEl = document.getElementById('userAvatar');
-  if (userProfile.name) { nameEl.textContent = userProfile.name; avatarEl.textContent = getInitials(userProfile.name); }
-  else { nameEl.textContent = 'İsim Soyisim'; nameEl.style.color = '#4b5563'; avatarEl.textContent = '?'; }
-  if (userProfile.role) { roleEl.textContent = userProfile.role; }
-  else { roleEl.textContent = 'Göreviniz'; }
-}
+    // USER
+    let userProfile = JSON.parse(localStorage.getItem('devtrack_user') || '{"name":"","role":""}');
 
-function editUserField(field) {
-  const isName = field === 'name';
-  const displayId = isName ? 'userNameDisplay' : 'userRoleDisplay';
-  const displayEl = document.getElementById(displayId);
-  const current = userProfile[field] || '';
-  const inp = document.createElement('input');
-  inp.type = 'text';
-  inp.className = 'user-input' + (isName ? '' : ' small');
-  inp.value = current;
-  inp.placeholder = isName ? 'İsim Soyisim' : 'Göreviniz';
-  displayEl.replaceWith(inp);
-  inp.focus(); inp.select();
-  const done = () => {
-    const val = inp.value.trim();
-    userProfile[field] = val;
-    localStorage.setItem('devtrack_user', JSON.stringify(userProfile));
-    const newEl = document.createElement('div');
-    newEl.id = displayId;
-    newEl.className = isName ? 'user-name' : 'user-role';
-    newEl.textContent = val || (isName ? 'İsim Soyisim' : 'Göreviniz');
-    if (!val) newEl.style.color = '#4b5563';
-    newEl.onclick = () => editUserField(field);
-    newEl.title = 'Düzenlmek için tıkla';
-    inp.replaceWith(newEl);
-    if (isName) document.getElementById('userAvatar').textContent = val ? getInitials(val) : '?';
-  };
-  inp.addEventListener('blur', done);
-  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); done(); } if (e.key === 'Escape') { inp.value = current; done(); } });
-}
+    function getInitials(name) {
+      const parts = name.trim().split(' ').filter(Boolean);
+      if (!parts.length) return '?';
+      return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+    }
 
-// PROJECT
-function weeksLabel(deadline) {
-  if (!deadline) return '';
-  const diff = Math.ceil((new Date(deadline) - new Date()) / (7 * 864e5));
-  if (diff < 0) return {text: 'Bitti', cls: 'week-done'};
-  if (diff === 0) return {text: 'Bu hafta!', cls: 'week-urgent'};
-  if (diff <= 2) return {text: diff + ' hafta', cls: 'week-urgent'};
-  if (diff <= 5) return {text: diff + ' hafta', cls: 'week-warn'};
-  return {text: diff + ' hafta', cls: 'week-ok'};
-}
+    function initUser() {
+      const nameEl = document.getElementById('userNameDisplay');
+      const roleEl = document.getElementById('userRoleDisplay');
+      const avatarEl = document.getElementById('userAvatar');
+      if (userProfile.name) { nameEl.textContent = userProfile.name; avatarEl.textContent = getInitials(userProfile.name); }
+      else { nameEl.textContent = 'İsim Soyisim'; nameEl.style.color = '#4b5563'; avatarEl.textContent = '?'; }
+      if (userProfile.role) { roleEl.textContent = userProfile.role; }
+      else { roleEl.textContent = 'Göreviniz'; }
+    }
 
-function renderProjects() {
-  const list = document.getElementById('projectList');
-  list.innerHTML = '';
-  data.projects.forEach(p => {
-    const li = document.createElement('li');
-    li.className = 'project-item' + (p.id === activeProjectId ? ' active' : '');
-    const wk = p.deadline ? weeksLabel(p.deadline) : null;
-    const badge = wk ? `<span class="week-badge ${wk.cls}">${wk.text}</span>` : '';
-    li.innerHTML = `<div class="dot" style="background:${p.color}"></div><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</span>${badge}<div class="proj-actions"><button class="proj-btn" onclick="editProject('${p.id}',event)" title="Düzenle"><i class="fas fa-pen"></i></button><button class="proj-btn" onclick="deleteProject('${p.id}',event)" title="Sil"><i class="fas fa-times"></i></button></div>`;
-    li.addEventListener('click', ()=>selectProject(p.id));
-    list.appendChild(li);
-  });
-}
+    function editUserField(field) {
+      const isName = field === 'name';
+      const displayId = isName ? 'userNameDisplay' : 'userRoleDisplay';
+      const displayEl = document.getElementById(displayId);
+      const current = userProfile[field] || '';
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'user-input' + (isName ? '' : ' small');
+      inp.value = current;
+      inp.placeholder = isName ? 'İsim Soyisim' : 'Göreviniz';
+      displayEl.replaceWith(inp);
+      inp.focus(); inp.select();
+      const done = () => {
+        const val = inp.value.trim();
+        userProfile[field] = val;
+        localStorage.setItem('devtrack_user', JSON.stringify(userProfile));
+        const newEl = document.createElement('div');
+        newEl.id = displayId;
+        newEl.className = isName ? 'user-name' : 'user-role';
+        newEl.textContent = val || (isName ? 'İsim Soyisim' : 'Göreviniz');
+        if (!val) newEl.style.color = '#4b5563';
+        newEl.onclick = () => editUserField(field);
+        newEl.title = 'Düzenlmek için tıkla';
+        inp.replaceWith(newEl);
+        if (isName) document.getElementById('userAvatar').textContent = val ? getInitials(val) : '?';
+      };
+      inp.addEventListener('blur', done);
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); done(); } if (e.key === 'Escape') { inp.value = current; done(); } });
+    }
 
-function openNewProjectModal() {
-  document.getElementById('editingProjectId').value = '';
-  document.getElementById('projModalTitle').innerHTML = '<i class="fas fa-folder-plus"></i> Yeni Proje';
-  document.getElementById('projSubmitBtn').textContent = 'Oluştur';
-  document.getElementById('projectName').value = '';
-  document.getElementById('projectDeadline').value = '';
-  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));
-  document.querySelector('.color-dot[data-color="#6366f1"]').classList.add('selected');
-  selectedColor = '#6366f1';
-  openModal('projectModal');
-}
+    // PROJECT
+    function weeksLabel(deadline) {
+      if (!deadline) return '';
+      const diff = Math.ceil((new Date(deadline) - new Date()) / (7 * 864e5));
+      if (diff < 0) return { text: 'Bitti', cls: 'week-done' };
+      if (diff === 0) return { text: 'Bu hafta!', cls: 'week-urgent' };
+      if (diff <= 2) return { text: diff + ' hafta', cls: 'week-urgent' };
+      if (diff <= 5) return { text: diff + ' hafta', cls: 'week-warn' };
+      return { text: diff + ' hafta', cls: 'week-ok' };
+    }
 
-function editProject(id, e) {
-  e.stopPropagation();
-  const p = data.projects.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('editingProjectId').value = id;
-  document.getElementById('projModalTitle').innerHTML = '<i class="fas fa-pen"></i> Projeyi Düzenle';
-  document.getElementById('projSubmitBtn').textContent = 'Kaydet';
-  document.getElementById('projectName').value = p.name;
-  document.getElementById('projectDeadline').value = p.deadline || '';
-  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));
-  const dot = document.querySelector(`.color-dot[data-color="${p.color}"]`);
-  if (dot) dot.classList.add('selected');
-  selectedColor = p.color;
-  openModal('projectModal');
-}
+    function renderProjects() {
+      const list = document.getElementById('projectList');
+      list.innerHTML = '';
+      data.projects.forEach(p => {
+        const li = document.createElement('li');
+        li.className = 'project-item' + (p.id === activeProjectId ? ' active' : '');
+        const wk = p.deadline ? weeksLabel(p.deadline) : null;
+        const badge = wk ? `<span class="week-badge ${wk.cls}">${wk.text}</span>` : '';
+        li.innerHTML = `<div class="dot" style="background:${p.color}"></div><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</span>${badge}<div class="proj-actions"><button class="proj-btn" onclick="editProject('${p.id}',event)" title="Düzenle"><i class="fas fa-pen"></i></button><button class="proj-btn" onclick="deleteProject('${p.id}',event)" title="Sil"><i class="fas fa-times"></i></button></div>`;
+        li.addEventListener('click', () => selectProject(p.id));
+        list.appendChild(li);
+      });
+    }
 
-function saveProject() {
-  const name = document.getElementById('projectName').value.trim();
-  const deadline = document.getElementById('projectDeadline').value;
-  if (!name) { document.getElementById('projectName').focus(); return; }
-  const editingId = document.getElementById('editingProjectId').value;
-  if (editingId) {
-    const p = data.projects.find(x => x.id === editingId);
-    if (p) { p.name = name; p.color = selectedColor; p.deadline = deadline; }
-    save(); closeModal('projectModal'); renderProjects();
-    if (activeProjectId === editingId) document.getElementById('activeProjectTitle').textContent = name;
-  } else {
-    const p = { id: uid(), name, color: selectedColor, deadline };
-    data.projects.push(p);
-    data.tasks[p.id] = [];
-    save(); closeModal('projectModal');
-    renderProjects(); selectProject(p.id);
-  }
-}
+    function openNewProjectModal() {
+      document.getElementById('editingProjectId').value = '';
+      document.getElementById('projModalTitle').innerHTML = '<i class="fas fa-folder-plus"></i> Yeni Proje';
+      document.getElementById('projSubmitBtn').textContent = 'Oluştur';
+      document.getElementById('projectName').value = '';
+      document.getElementById('projectDeadline').value = '';
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+      document.querySelector('.color-dot[data-color="#6366f1"]').classList.add('selected');
+      selectedColor = '#6366f1';
+      openModal('projectModal');
+    }
 
-function deleteProject(id, e) {
-  e.stopPropagation();
-  if (!confirm('Proje silinsin mi?')) return;
-  data.projects = data.projects.filter(p => p.id !== id);
-  delete data.tasks[id];
-  save();
-  if (activeProjectId === id) { activeProjectId = null; renderBoard(null); document.getElementById('btnNewTask').style.display='none'; document.getElementById('activeProjectTitle').textContent='Proje Seçin'; }
-  renderProjects();
-}
+    function editProject(id, e) {
+      e.stopPropagation();
+      const p = data.projects.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('editingProjectId').value = id;
+      document.getElementById('projModalTitle').innerHTML = '<i class="fas fa-pen"></i> Projeyi Düzenle';
+      document.getElementById('projSubmitBtn').textContent = 'Kaydet';
+      document.getElementById('projectName').value = p.name;
+      document.getElementById('projectDeadline').value = p.deadline || '';
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+      const dot = document.querySelector(`.color-dot[data-color="${p.color}"]`);
+      if (dot) dot.classList.add('selected');
+      selectedColor = p.color;
+      openModal('projectModal');
+    }
 
-function selectProject(id) {
-  activeProjectId = id;
-  renderProjects();
-  renderBoard(id);
-  renderPhases(id);
-  const p = data.projects.find(x => x.id === id);
-  document.getElementById('activeProjectTitle').textContent = p ? p.name : '';
-  document.getElementById('btnAddPhase').style.display = 'flex';
-}
+    function saveProject() {
+      const name = document.getElementById('projectName').value.trim();
+      const deadline = document.getElementById('projectDeadline').value;
+      if (!name) { document.getElementById('projectName').focus(); return; }
+      const editingId = document.getElementById('editingProjectId').value;
+      if (editingId) {
+        const p = data.projects.find(x => x.id === editingId);
+        if (p) { p.name = name; p.color = selectedColor; p.deadline = deadline; }
+        save(); closeModal('projectModal'); renderProjects();
+        if (activeProjectId === editingId) document.getElementById('activeProjectTitle').textContent = name;
+      } else {
+        const p = { id: uid(), name, color: selectedColor, deadline };
+        data.projects.push(p);
+        data.tasks[p.id] = [];
+        save(); closeModal('projectModal');
+        renderProjects(); selectProject(p.id);
+      }
+    }
 
-// BOARD
-function renderBoard(projectId) {
-  const board = document.getElementById('board');
-  if (!projectId) { board.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;flex:1;color:#2d3748;flex-direction:column;gap:10px"><i class="fas fa-diagram-project" style="font-size:48px"></i><p style="font-size:14px">Soldaki menüden bir proje seçin</p></div>'; return; }
-  const tasks = data.tasks[projectId] || [];
-  const cols = [
-    {id:'yapilacak', label:'Yapılacak', cls:'col-yapilacak', icon:'circle-dot'},
-    {id:'islemde',   label:'İşlemde',   cls:'col-islemde',   icon:'spinner'},
-    {id:'tamamlandi',label:'Tamamlandı',cls:'col-tamamlandi',icon:'circle-check'}
-  ];
-  board.innerHTML = cols.map(c => {
-    const items = tasks.filter(t => t.status === c.id);
-    return `
+    function deleteProject(id, e) {
+      e.stopPropagation();
+      if (!confirm('Proje silinsin mi?')) return;
+      data.projects = data.projects.filter(p => p.id !== id);
+      delete data.tasks[id];
+      save();
+      if (activeProjectId === id) { activeProjectId = null; renderBoard(null); document.getElementById('btnNewTask').style.display = 'none'; document.getElementById('activeProjectTitle').textContent = 'Proje Seçin'; }
+      renderProjects();
+    }
+
+    function selectProject(id) {
+      activeProjectId = id;
+      renderProjects();
+      renderBoard(id);
+      renderPhases(id);
+      const p = data.projects.find(x => x.id === id);
+      document.getElementById('activeProjectTitle').textContent = p ? p.name : '';
+      document.getElementById('btnAddPhase').style.display = 'flex';
+    }
+
+    // BOARD
+    function renderBoard(projectId) {
+      const board = document.getElementById('board');
+      if (!projectId) { board.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;flex:1;color:#2d3748;flex-direction:column;gap:10px"><i class="fas fa-diagram-project" style="font-size:48px"></i><p style="font-size:14px">Soldaki menüden bir proje seçin</p></div>'; return; }
+      const tasks = data.tasks[projectId] || [];
+      const cols = [
+        { id: 'yapilacak', label: 'Yapılacak', cls: 'col-yapilacak', icon: 'circle-dot' },
+        { id: 'islemde', label: 'İşlemde', cls: 'col-islemde', icon: 'spinner' },
+        { id: 'tamamlandi', label: 'Tamamlandı', cls: 'col-tamamlandi', icon: 'circle-check' }
+      ];
+      board.innerHTML = cols.map(c => {
+        const items = tasks.filter(t => t.status === c.id);
+        return `
     <div class="column ${c.cls}">
       <div class="col-bar"></div>
       <div class="col-header">
@@ -562,29 +1403,29 @@ function renderBoard(projectId) {
       </div>
       ${c.id === 'yapilacak' ? '<button class="col-add-task-btn" onclick="openNewTaskModal()"><i class="fas fa-plus"></i> Görev Ekle</button>' : ''}
     </div>`;
-  }).join('');
-  // attach drag events
-  board.querySelectorAll('.card').forEach(el => {
-    el.addEventListener('dragstart', e => { draggedId = el.dataset.id; el.classList.add('dragging'); });
-    el.addEventListener('dragend', e => { el.classList.remove('dragging'); });
-  });
-}
+      }).join('');
+      // attach drag events
+      board.querySelectorAll('.card').forEach(el => {
+        el.addEventListener('dragstart', e => { draggedId = el.dataset.id; el.classList.add('dragging'); });
+        el.addEventListener('dragend', e => { el.classList.remove('dragging'); });
+      });
+    }
 
-function cardHTML(t) {
-  const tagCls = 'tag-' + t.tag;
-  const tagLabel = TAGS[t.tag] || t.tag;
-  const pri = t.priority === 'high' ? '<span style="font-size:10px;color:#ef4444">● Yüksek</span>' : t.priority === 'low' ? '<span style="font-size:10px;color:#6366f1">● Düşük</span>' : '<span style="font-size:10px;color:#4b5563">⚪ Normal</span>';
-  const dur = t.duration ? `<span class="card-duration"><i class="fas fa-clock"></i>${t.duration} gün</span>` : '';
-  const desc = t.text ? `<div class="card-desc">${t.text}</div>` : '';
-  let phaseTag = '';
-  if (t.phaseId) {
-    const phases = data.phases[activeProjectId] || [];
-    const colors = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
-    const idx = phases.findIndex(p => p.id === t.phaseId);
-    const ph = phases[idx];
-    if (ph) phaseTag = `<div class="card-phase-tag" style="background:${colors[idx%colors.length]}20;color:${colors[idx%colors.length]}"><i class="fas fa-flag" style="font-size:9px"></i>${ph.name}</div>`;
-  }
-  return `<div class="card" draggable="true" data-id="${t.id}">
+    function cardHTML(t) {
+      const tagCls = 'tag-' + t.tag;
+      const tagLabel = TAGS[t.tag] || t.tag;
+      const pri = t.priority === 'high' ? '<span style="font-size:10px;color:#ef4444">● Yüksek</span>' : t.priority === 'low' ? '<span style="font-size:10px;color:#6366f1">● Düşük</span>' : '<span style="font-size:10px;color:#4b5563">⚪ Normal</span>';
+      const dur = t.duration ? `<span class="card-duration"><i class="fas fa-clock"></i>${t.duration} gün</span>` : '';
+      const desc = t.text ? `<div class="card-desc">${t.text}</div>` : '';
+      let phaseTag = '';
+      if (t.phaseId) {
+        const phases = data.phases[activeProjectId] || [];
+        const colors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
+        const idx = phases.findIndex(p => p.id === t.phaseId);
+        const ph = phases[idx];
+        if (ph) phaseTag = `<div class="card-phase-tag" style="background:${colors[idx % colors.length]}20;color:${colors[idx % colors.length]}"><i class="fas fa-flag" style="font-size:9px"></i>${ph.name}</div>`;
+      }
+      return `<div class="card" draggable="true" data-id="${t.id}">
     <div class="card-tag ${tagCls}">${tagLabel}</div>
     ${phaseTag}
     <div class="card-title">${t.title || t.text}</div>
@@ -597,115 +1438,115 @@ function cardHTML(t) {
       </div>
     </div>
   </div>`;
-}
-
-// TASKS
-function populatePhaseSelect(selectedId) {
-  const sel = document.getElementById('taskPhase');
-  const phases = (data.phases[activeProjectId] || []);
-  sel.innerHTML = '<option value="">— Bağlı değil —</option>' +
-    phases.map(ph => `<option value="${ph.id}" ${ph.id===selectedId?'selected':''}>${ph.name}</option>`).join('');
-}
-
-function openNewTaskModal() {
-  document.getElementById('editingTaskId').value = '';
-  document.getElementById('taskModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Yeni Görev';
-  document.getElementById('taskSubmitBtn').textContent = 'Ekle';
-  document.getElementById('taskTitle').value = '';
-  document.getElementById('taskText').value = '';
-  document.getElementById('taskTag').value = 'task';
-  document.getElementById('taskPriority').value = 'normal';
-  document.getElementById('taskDuration').value = '';
-  populatePhaseSelect('');
-  openModal('taskModal');
-}
-
-function editTask(id) {
-  const t = data.tasks[activeProjectId].find(x => x.id === id);
-  if (!t) return;
-  document.getElementById('editingTaskId').value = id;
-  document.getElementById('taskModalTitle').innerHTML = '<i class="fas fa-pen"></i> Görevi Düzenle';
-  document.getElementById('taskSubmitBtn').textContent = 'Kaydet';
-  document.getElementById('taskTitle').value = t.title || '';
-  document.getElementById('taskText').value = t.text || '';
-  document.getElementById('taskTag').value = t.tag || 'task';
-  document.getElementById('taskPriority').value = t.priority || 'normal';
-  document.getElementById('taskDuration').value = t.duration || '';
-  populatePhaseSelect(t.phaseId || '');
-  openModal('taskModal');
-}
-
-function saveTask() {
-  const title = document.getElementById('taskTitle').value.trim();
-  const text = document.getElementById('taskText').value.trim();
-  const duration = document.getElementById('taskDuration').value.trim();
-  const tag = document.getElementById('taskTag').value;
-  const priority = document.getElementById('taskPriority').value;
-  const phaseId = document.getElementById('taskPhase').value;
-  if (!title) { document.getElementById('taskTitle').focus(); return; }
-  const editingId = document.getElementById('editingTaskId').value;
-  if (editingId) {
-    const task = data.tasks[activeProjectId].find(t => t.id === editingId);
-    if (task) { task.title = title; task.text = text; task.tag = tag; task.priority = priority; task.duration = duration; task.phaseId = phaseId; }
-  } else {
-    data.tasks[activeProjectId].push({ id: uid(), title, text, tag, priority, duration, phaseId, status: 'yapilacak' });
-  }
-  save();
-  closeModal('taskModal');
-  renderBoard(activeProjectId);
-  renderPhases(activeProjectId);
-}
-
-function deleteTask(id) {
-  data.tasks[activeProjectId] = data.tasks[activeProjectId].filter(t => t.id !== id);
-  save(); renderBoard(activeProjectId);
-}
-
-// PHASES
-function fmtDate(d) {
-  if (!d) return '';
-  const [y,m,day] = d.split('-');
-  return `${day}.${m}.${y}`;
-}
-function phaseStatus(start, end) {
-  const now = new Date(); const s = new Date(start); const e = new Date(end);
-  if (now > e) return {label:'Tamamlandı', cls:'ps-done'};
-  if (now >= s) return {label:'Devam Ediyor', cls:'ps-active'};
-  return {label:'Bekliyor', cls:'ps-pending'};
-}
-
-function renderPhases(projectId) {
-  const list = document.getElementById('phasesList');
-  if (!projectId) { list.innerHTML = '<div class="phase-empty"><i class="fas fa-flag"></i><span>Proje seçin</span></div>'; return; }
-  if (!data.phases[projectId]) data.phases[projectId] = [];
-  const phases = data.phases[projectId];
-  if (!phases.length) { list.innerHTML = '<div class="phase-empty"><i class="fas fa-flag"></i><span>Henüz adım yok</span><span style="font-size:11px">+ Adım butonuna tıklayın</span></div>'; return; }
-  const colors = ['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
-  const allTasks = data.tasks[projectId] || [];
-  list.innerHTML = phases.map((ph, i) => {
-    const c = colors[i % colors.length];
-    const st = ph.start && ph.end ? phaseStatus(ph.start, ph.end) : null;
-    const statusBadge = st ? `<span class="phase-status ${st.cls}">${st.label}</span>` : '';
-    const connector = i > 0 ? '<div class="phase-connector"></div>' : '';
-    // Gün hesapla
-    let dayCount = '';
-    if (ph.start && ph.end) {
-      const days = Math.ceil((new Date(ph.end) - new Date(ph.start)) / 864e5);
-      dayCount = `<span style="font-size:10px;color:#4b5563;display:flex;align-items:center;gap:3px"><i class="fas fa-calendar-days" style="font-size:9px"></i>${days} gün</span>`;
     }
-    // Bağlı görev sayısı
-    const taskCount = allTasks.filter(t => t.phaseId === ph.id).length;
-    const taskBadge = taskCount > 0 ? `<span style="font-size:10px;background:#1e2535;color:#6366f1;padding:1px 7px;border-radius:10px;font-weight:600">${taskCount} görev</span>` : '';
-    return `${connector}<div class="phase-item">
+
+    // TASKS
+    function populatePhaseSelect(selectedId) {
+      const sel = document.getElementById('taskPhase');
+      const phases = (data.phases[activeProjectId] || []);
+      sel.innerHTML = '<option value="">— Bağlı değil —</option>' +
+        phases.map(ph => `<option value="${ph.id}" ${ph.id === selectedId ? 'selected' : ''}>${ph.name}</option>`).join('');
+    }
+
+    function openNewTaskModal() {
+      document.getElementById('editingTaskId').value = '';
+      document.getElementById('taskModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Yeni Görev';
+      document.getElementById('taskSubmitBtn').textContent = 'Ekle';
+      document.getElementById('taskTitle').value = '';
+      document.getElementById('taskText').value = '';
+      document.getElementById('taskTag').value = 'task';
+      document.getElementById('taskPriority').value = 'normal';
+      document.getElementById('taskDuration').value = '';
+      populatePhaseSelect('');
+      openModal('taskModal');
+    }
+
+    function editTask(id) {
+      const t = data.tasks[activeProjectId].find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('editingTaskId').value = id;
+      document.getElementById('taskModalTitle').innerHTML = '<i class="fas fa-pen"></i> Görevi Düzenle';
+      document.getElementById('taskSubmitBtn').textContent = 'Kaydet';
+      document.getElementById('taskTitle').value = t.title || '';
+      document.getElementById('taskText').value = t.text || '';
+      document.getElementById('taskTag').value = t.tag || 'task';
+      document.getElementById('taskPriority').value = t.priority || 'normal';
+      document.getElementById('taskDuration').value = t.duration || '';
+      populatePhaseSelect(t.phaseId || '');
+      openModal('taskModal');
+    }
+
+    function saveTask() {
+      const title = document.getElementById('taskTitle').value.trim();
+      const text = document.getElementById('taskText').value.trim();
+      const duration = document.getElementById('taskDuration').value.trim();
+      const tag = document.getElementById('taskTag').value;
+      const priority = document.getElementById('taskPriority').value;
+      const phaseId = document.getElementById('taskPhase').value;
+      if (!title) { document.getElementById('taskTitle').focus(); return; }
+      const editingId = document.getElementById('editingTaskId').value;
+      if (editingId) {
+        const task = data.tasks[activeProjectId].find(t => t.id === editingId);
+        if (task) { task.title = title; task.text = text; task.tag = tag; task.priority = priority; task.duration = duration; task.phaseId = phaseId; }
+      } else {
+        data.tasks[activeProjectId].push({ id: uid(), title, text, tag, priority, duration, phaseId, status: 'yapilacak' });
+      }
+      save();
+      closeModal('taskModal');
+      renderBoard(activeProjectId);
+      renderPhases(activeProjectId);
+    }
+
+    function deleteTask(id) {
+      data.tasks[activeProjectId] = data.tasks[activeProjectId].filter(t => t.id !== id);
+      save(); renderBoard(activeProjectId);
+    }
+
+    // PHASES
+    function fmtDate(d) {
+      if (!d) return '';
+      const [y, m, day] = d.split('-');
+      return `${day}.${m}.${y}`;
+    }
+    function phaseStatus(start, end) {
+      const now = new Date(); const s = new Date(start); const e = new Date(end);
+      if (now > e) return { label: 'Tamamlandı', cls: 'ps-done' };
+      if (now >= s) return { label: 'Devam Ediyor', cls: 'ps-active' };
+      return { label: 'Bekliyor', cls: 'ps-pending' };
+    }
+
+    function renderPhases(projectId) {
+      const list = document.getElementById('phasesList');
+      if (!projectId) { list.innerHTML = '<div class="phase-empty"><i class="fas fa-flag"></i><span>Proje seçin</span></div>'; return; }
+      if (!data.phases[projectId]) data.phases[projectId] = [];
+      const phases = data.phases[projectId];
+      if (!phases.length) { list.innerHTML = '<div class="phase-empty"><i class="fas fa-flag"></i><span>Henüz adım yok</span><span style="font-size:11px">+ Adım butonuna tıklayın</span></div>'; return; }
+      const colors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#06b6d4'];
+      const allTasks = data.tasks[projectId] || [];
+      list.innerHTML = phases.map((ph, i) => {
+        const c = colors[i % colors.length];
+        const st = ph.start && ph.end ? phaseStatus(ph.start, ph.end) : null;
+        const statusBadge = st ? `<span class="phase-status ${st.cls}">${st.label}</span>` : '';
+        const connector = i > 0 ? '<div class="phase-connector"></div>' : '';
+        // Gün hesapla
+        let dayCount = '';
+        if (ph.start && ph.end) {
+          const days = Math.ceil((new Date(ph.end) - new Date(ph.start)) / 864e5);
+          dayCount = `<span style="font-size:10px;color:#4b5563;display:flex;align-items:center;gap:3px"><i class="fas fa-calendar-days" style="font-size:9px"></i>${days} gün</span>`;
+        }
+        // Bağlı görev sayısı
+        const taskCount = allTasks.filter(t => t.phaseId === ph.id).length;
+        const taskBadge = taskCount > 0 ? `<span style="font-size:10px;background:#1e2535;color:#6366f1;padding:1px 7px;border-radius:10px;font-weight:600">${taskCount} görev</span>` : '';
+        return `${connector}<div class="phase-item">
       <div class="phase-dot-row">
         <div class="phase-dot" style="background:${c}"></div>
         <span class="phase-name">${ph.name}</span>
         ${statusBadge}
       </div>
       <div class="phase-dates">
-        <span class="phase-date-badge"><i class="fas fa-play" style="font-size:8px;color:${c}"></i>${fmtDate(ph.start)||'—'}</span>
+        <span class="phase-date-badge"><i class="fas fa-play" style="font-size:8px;color:${c}"></i>${fmtDate(ph.start) || '—'}</span>
         <span style="color:#2d3748;font-size:10px">→</span>
-        <span class="phase-date-badge"><i class="fas fa-stop" style="font-size:8px;color:#ef4444"></i>${fmtDate(ph.end)||'—'}</span>
+        <span class="phase-date-badge"><i class="fas fa-stop" style="font-size:8px;color:#ef4444"></i>${fmtDate(ph.end) || '—'}</span>
       </div>
       <div style="display:flex;gap:6px;margin-top:6px;margin-left:18px;align-items:center">${dayCount}${taskBadge}</div>
       <div class="phase-actions">
@@ -713,95 +1554,96 @@ function renderPhases(projectId) {
         <button class="phase-btn phase-btn-del" onclick="deletePhase('${ph.id}')"><i class="fas fa-trash"></i></button>
       </div>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-function openNewPhaseModal() {
-  document.getElementById('editingPhaseId').value = '';
-  document.getElementById('phaseModalTitle').innerHTML = '<i class="fas fa-flag"></i> Yeni Adım';
-  document.getElementById('phaseSubmitBtn').textContent = 'Ekle';
-  document.getElementById('phaseName').value = '';
-  document.getElementById('phaseStart').value = '';
-  document.getElementById('phaseEnd').value = '';
-  openModal('phaseModal');
-}
+    function openNewPhaseModal() {
+      document.getElementById('editingPhaseId').value = '';
+      document.getElementById('phaseModalTitle').innerHTML = '<i class="fas fa-flag"></i> Yeni Adım';
+      document.getElementById('phaseSubmitBtn').textContent = 'Ekle';
+      document.getElementById('phaseName').value = '';
+      document.getElementById('phaseStart').value = '';
+      document.getElementById('phaseEnd').value = '';
+      openModal('phaseModal');
+    }
 
-function editPhase(id) {
-  const ph = (data.phases[activeProjectId]||[]).find(x => x.id === id);
-  if (!ph) return;
-  document.getElementById('editingPhaseId').value = id;
-  document.getElementById('phaseModalTitle').innerHTML = '<i class="fas fa-pen"></i> Adımı Düzenle';
-  document.getElementById('phaseSubmitBtn').textContent = 'Kaydet';
-  document.getElementById('phaseName').value = ph.name;
-  document.getElementById('phaseStart').value = ph.start || '';
-  document.getElementById('phaseEnd').value = ph.end || '';
-  openModal('phaseModal');
-}
+    function editPhase(id) {
+      const ph = (data.phases[activeProjectId] || []).find(x => x.id === id);
+      if (!ph) return;
+      document.getElementById('editingPhaseId').value = id;
+      document.getElementById('phaseModalTitle').innerHTML = '<i class="fas fa-pen"></i> Adımı Düzenle';
+      document.getElementById('phaseSubmitBtn').textContent = 'Kaydet';
+      document.getElementById('phaseName').value = ph.name;
+      document.getElementById('phaseStart').value = ph.start || '';
+      document.getElementById('phaseEnd').value = ph.end || '';
+      openModal('phaseModal');
+    }
 
-function savePhase() {
-  const name = document.getElementById('phaseName').value.trim();
-  const start = document.getElementById('phaseStart').value;
-  const end = document.getElementById('phaseEnd').value;
-  if (!name) { document.getElementById('phaseName').focus(); return; }
-  if (!data.phases[activeProjectId]) data.phases[activeProjectId] = [];
-  const editingId = document.getElementById('editingPhaseId').value;
-  if (editingId) {
-    const ph = data.phases[activeProjectId].find(x => x.id === editingId);
-    if (ph) { ph.name = name; ph.start = start; ph.end = end; }
-  } else {
-    data.phases[activeProjectId].push({ id: uid(), name, start, end });
-  }
-  save(); closeModal('phaseModal'); renderPhases(activeProjectId);
-}
+    function savePhase() {
+      const name = document.getElementById('phaseName').value.trim();
+      const start = document.getElementById('phaseStart').value;
+      const end = document.getElementById('phaseEnd').value;
+      if (!name) { document.getElementById('phaseName').focus(); return; }
+      if (!data.phases[activeProjectId]) data.phases[activeProjectId] = [];
+      const editingId = document.getElementById('editingPhaseId').value;
+      if (editingId) {
+        const ph = data.phases[activeProjectId].find(x => x.id === editingId);
+        if (ph) { ph.name = name; ph.start = start; ph.end = end; }
+      } else {
+        data.phases[activeProjectId].push({ id: uid(), name, start, end });
+      }
+      save(); closeModal('phaseModal'); renderPhases(activeProjectId);
+    }
 
-function deletePhase(id) {
-  if (!data.phases[activeProjectId]) return;
-  data.phases[activeProjectId] = data.phases[activeProjectId].filter(x => x.id !== id);
-  save(); renderPhases(activeProjectId);
-}
+    function deletePhase(id) {
+      if (!data.phases[activeProjectId]) return;
+      data.phases[activeProjectId] = data.phases[activeProjectId].filter(x => x.id !== id);
+      save(); renderPhases(activeProjectId);
+    }
 
-// DRAG & DROP
-function onDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
-function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
-function onDrop(e, status) {
-  e.preventDefault();
-  e.currentTarget.classList.remove('drag-over');
-  if (!draggedId) return;
-  const task = data.tasks[activeProjectId].find(t => t.id === draggedId);
-  if (task) { task.status = status; save(); renderBoard(activeProjectId); }
-  draggedId = null;
-}
+    // DRAG & DROP
+    function onDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+    function onDrop(e, status) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      if (!draggedId) return;
+      const task = data.tasks[activeProjectId].find(t => t.id === draggedId);
+      if (task) { task.status = status; save(); renderBoard(activeProjectId); }
+      draggedId = null;
+    }
 
-// MODAL
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
+    // MODAL
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
 
-// COLOR PICKER
-document.getElementById('colorPicker').addEventListener('click', e => {
-  const dot = e.target.closest('.color-dot');
-  if (!dot) return;
-  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-  dot.classList.add('selected');
-  selectedColor = dot.dataset.color;
-});
+    // COLOR PICKER
+    document.getElementById('colorPicker').addEventListener('click', e => {
+      const dot = e.target.closest('.color-dot');
+      if (!dot) return;
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+      dot.classList.add('selected');
+      selectedColor = dot.dataset.color;
+    });
 
-// ENTER KEY
-document.getElementById('projectName').addEventListener('keydown', e => { if(e.key==='Enter') saveProject(); });
-document.getElementById('phaseName').addEventListener('keydown', e => { if(e.key==='Enter') savePhase(); });
+    // ENTER KEY
+    document.getElementById('projectName').addEventListener('keydown', e => { if (e.key === 'Enter') saveProject(); });
+    document.getElementById('phaseName').addEventListener('keydown', e => { if (e.key === 'Enter') savePhase(); });
 
-// CTRL+Z UNDO
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-    const anyOpen = document.querySelector('.overlay.open');
-    if (!anyOpen) { e.preventDefault(); undoAction(); }
-  }
-});
+    // CTRL+Z UNDO
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        const anyOpen = document.querySelector('.overlay.open');
+        if (!anyOpen) { e.preventDefault(); undoAction(); }
+      }
+    });
 
-// INIT
-initUser();
-renderProjects();
-if (data.projects.length > 0) selectProject(data.projects[0].id);
-</script>
+    // INIT
+    initUser();
+    renderProjects();
+    if (data.projects.length > 0) selectProject(data.projects[0].id);
+  </script>
 </body>
+
 </html>

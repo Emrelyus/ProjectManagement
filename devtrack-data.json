@@ -1,0 +1,87 @@
+{
+  "projects": [
+    {
+      "id": "mp5ernlfkleqwul152",
+      "name": "IXC1",
+      "color": "#6366f1",
+      "deadline": "2026-12-01"
+    }
+  ],
+  "tasks": {
+    "mp5ernlfkleqwul152": [
+      { "id": "t1",  "title": "Teknik Gereksinim Dokümanı Hazırlanması", "text": "Yazılım fonksiyonel gereksinimleri.",         "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "mp6mshc9t88n5xtbwy", "status": "tamamlandi" },
+      { "id": "t2",  "title": "MCU Kaynak Analizi",                       "text": "Flash, RAM ve çevre birimi kullanım tahmini.", "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "mp6mshc9t88n5xtbwy", "status": "tamamlandi" },
+      { "id": "t3",  "title": "Güç Bütçesi Hesaplamaları",                "text": "Uyku ve aktif mod akım çekim projeksiyonu.",  "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "mp6mshc9t88n5xtbwy", "status": "tamamlandi" },
+      { "id": "t4",  "title": "Pin-Mux Haritasının Çıkartılması",         "text": "Donanım pin konfigürasyonu.",                "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "mp6mshc9t88n5xtbwy", "status": "tamamlandi" },
+      { "id": "t5",  "title": "Geliştirme Ortamı Kurulumu",               "text": "IDE, Toolchain ve Debugger ayarları.",        "tag": "task", "priority": "low",    "duration": "1",  "phaseId": "mp6mshc9t88n5xtbwy", "status": "tamamlandi" },
+
+      { "id": "t6",  "title": "İlk Enerji Verme ve Debug Port Kontrolü", "text": "SWD/JTAG erişim testi.",           "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "p2", "status": "islemde" },
+      { "id": "t7",  "title": "Sistem Saat Ayarları (Clock Tree)",        "text": "HSE/LSE konfigürasyonu.",          "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "p2", "status": "islemde" },
+      { "id": "t8",  "title": "GPIO Sürücülerinin Yazılması",             "text": "Input/Output ve Interrupt testleri.", "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p2", "status": "yapilacak" },
+      { "id": "t9",  "title": "UART Haberleşme Sürücüleri",              "text": "Debug log mekanizması.",            "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p2", "status": "yapilacak" },
+      { "id": "t10", "title": "I2C/SPI Master Sürücüleri",               "text": "Temel haberleşme testleri.",        "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p2", "status": "yapilacak" },
+
+      { "id": "t11", "title": "RTOS Çekirdek Entegrasyonu",                "text": "Kernel init ve Scheduler başlatma.", "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "p3", "status": "yapilacak" },
+      { "id": "t12", "title": "Task Öncelik Matrisinin Oluşturulması",     "text": "Görev hiyerarşisi.",               "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p3", "status": "yapilacak" },
+      { "id": "t13", "title": "Semaphor ve Mutex Yapılarının Kurulumu",    "text": "Kaynak paylaşımı güvenliği.",      "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p3", "status": "yapilacak" },
+      { "id": "t14", "title": "Message Queue Mekanizması",                 "text": "Tasklar arası veri iletimi.",      "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p3", "status": "yapilacak" },
+      { "id": "t15", "title": "Yazılım Watchdog (WDT) Entegrasyonu",      "text": "Sistem koruma.",                   "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "p3", "status": "yapilacak" },
+
+      { "id": "t16", "title": "ADC Örnekleme Altyapısı",          "text": "DMA ile veri okuma.",          "tag": "task", "priority": "normal", "duration": "2",  "phaseId": "p4", "status": "yapilacak" },
+      { "id": "t17", "title": "Sıcaklık Sensörü Sürücüsü",        "text": "I2C üzerinden okuma.",         "tag": "task", "priority": "low",    "duration": "1",  "phaseId": "p4", "status": "yapilacak" },
+      { "id": "t18", "title": "İvmeölçer (IMU) Entegrasyonu",     "text": "Hareket algılama.",            "tag": "task", "priority": "normal", "duration": "2",  "phaseId": "p4", "status": "yapilacak" },
+      { "id": "t19", "title": "EEPROM/Flash Depolama Sürücüsü",   "text": "Parametre saklama.",           "tag": "task", "priority": "high",   "duration": "2",  "phaseId": "p4", "status": "yapilacak" },
+      { "id": "t20", "title": "Harici Flash Dosya Sistemi",        "text": "LittleFS kurulumu.",           "tag": "task", "priority": "low",    "duration": "2",  "phaseId": "p4", "status": "yapilacak" },
+
+      { "id": "t21", "title": "Sistem Durum Makinesi (FSM) Tasarımı",  "text": "Main loop lojiği.",        "tag": "task", "priority": "high",   "duration": "3",  "phaseId": "p5", "status": "yapilacak" },
+      { "id": "t22", "title": "Hata Yönetimi (Error Handling) Modülü", "text": "Aksiyon tanımları.",       "tag": "task", "priority": "high",   "duration": "2",  "phaseId": "p5", "status": "yapilacak" },
+      { "id": "t23", "title": "Güç Yönetimi (Low Power) Algoritması",  "text": "Uyku modu geçişleri.",     "tag": "task", "priority": "normal", "duration": "3",  "phaseId": "p5", "status": "yapilacak" },
+      { "id": "t24", "title": "Veri Filtreleme Algoritmaları",          "text": "Moving Average/Kalman.",   "tag": "task", "priority": "normal", "duration": "3",  "phaseId": "p5", "status": "yapilacak" },
+      { "id": "t25", "title": "Sistem Kalibrasyon Rutini",              "text": "Sensör sıfırlama.",        "tag": "task", "priority": "low",    "duration": "2",  "phaseId": "p5", "status": "yapilacak" },
+
+      { "id": "t26", "title": "Protokol Stack Başlatılması",      "text": "Stack init işlemleri.",       "tag": "task", "priority": "high",   "duration": "2",  "phaseId": "p6", "status": "yapilacak" },
+      { "id": "t27", "title": "Veri Paketleme Formatı",           "text": "Protobuf/JSON tasarımı.",     "tag": "task", "priority": "normal", "duration": "2",  "phaseId": "p6", "status": "yapilacak" },
+      { "id": "t28", "title": "Bağlantı Yönetimi",                "text": "Pairing/Bonding.",            "tag": "task", "priority": "normal", "duration": "2",  "phaseId": "p6", "status": "yapilacak" },
+      { "id": "t29", "title": "Veri Aktarım Optimizasyonu",       "text": "Paket kaybı kontrolü.",       "tag": "task", "priority": "low",    "duration": "2",  "phaseId": "p6", "status": "yapilacak" },
+      { "id": "t30", "title": "OTA Güncelleme Altyapısı",         "text": "Uzaktan güncelleme.",         "tag": "task", "priority": "high",   "duration": "3",  "phaseId": "p6", "status": "yapilacak" },
+
+      { "id": "t31", "title": "Birim Testleri (Unit Tests)", "text": "Fonksiyon doğrulamaları.",    "tag": "task", "priority": "normal", "duration": "3",  "phaseId": "p7", "status": "yapilacak" },
+      { "id": "t32", "title": "Entegrasyon Testleri",       "text": "Modüller arası uyum.",         "tag": "task", "priority": "high",   "duration": "2",  "phaseId": "p7", "status": "yapilacak" },
+      { "id": "t33", "title": "Stres Testleri",             "text": "Limit zorlama.",               "tag": "task", "priority": "normal", "duration": "2",  "phaseId": "p7", "status": "yapilacak" },
+      { "id": "t34", "title": "EMI/EMC Ön Kontrolleri",    "text": "Gürültü analizleri.",          "tag": "task", "priority": "low",    "duration": "2",  "phaseId": "p7", "status": "yapilacak" },
+      { "id": "t35", "title": "Güç Tüketimi Profilleme",   "text": "Akım ölçümleri.",              "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p7", "status": "yapilacak" },
+
+      { "id": "t36", "title": "Saha Kurulumu ve İlk Canlı Test",  "text": "Fiziksel montaj.",        "tag": "task", "priority": "high",   "duration": "3",  "phaseId": "p8", "status": "yapilacak" },
+      { "id": "t37", "title": "Uzaktan Log İzleme Kurulumu",       "text": "Veri akış takibi.",       "tag": "task", "priority": "normal", "duration": "2",  "phaseId": "p8", "status": "yapilacak" },
+      { "id": "t38", "title": "Çevresel Etki Analizi",             "text": "Sıcaklık/Nem etkisi.",   "tag": "task", "priority": "low",    "duration": "5",  "phaseId": "p8", "status": "yapilacak" },
+      { "id": "t39", "title": "Kullanıcı Deneyimi Gözlemi",        "text": "Operatör geri bildirimi.", "tag": "task", "priority": "normal", "duration": "5", "phaseId": "p8", "status": "yapilacak" },
+      { "id": "t40", "title": "Haftalık Saha Performans Raporu",   "text": "Uptime takibi.",          "tag": "task", "priority": "low",    "duration": "7",  "phaseId": "p8", "status": "yapilacak" },
+
+      { "id": "t41", "title": "Sahadan Gelen Bugların Onarımı",    "text": "Acil düzeltmeler.",           "tag": "task", "priority": "high",   "duration": "10", "phaseId": "p9", "status": "yapilacak" },
+      { "id": "t42", "title": "Yazılım Regresyon Testleri",         "text": "Yeni hata kontrolü.",         "tag": "task", "priority": "high",   "duration": "5",  "phaseId": "p9", "status": "yapilacak" },
+      { "id": "t43", "title": "Bağlantı Kararlılık Testi",          "text": "Network stabilitesi.",        "tag": "task", "priority": "normal", "duration": "5",  "phaseId": "p9", "status": "yapilacak" },
+      { "id": "t44", "title": "Sınır Durum Validasyonları",         "text": "Edge case senaryoları.",      "tag": "task", "priority": "normal", "duration": "5",  "phaseId": "p9", "status": "yapilacak" },
+      { "id": "t45", "title": "Saha Yazılım Versiyon Yönetimi",    "text": "Güncel sürüm yayılımı.",      "tag": "task", "priority": "high",   "duration": "5",  "phaseId": "p9", "status": "yapilacak" },
+
+      { "id": "t46", "title": "Kod Optimizasyonu (Boyut/Hız)",       "text": "Release build temizliği.", "tag": "task", "priority": "normal", "duration": "3",  "phaseId": "p10", "status": "yapilacak" },
+      { "id": "t47", "title": "Teknik El Kitabı Hazırlanması",        "text": "API dokümantasyonu.",      "tag": "task", "priority": "high",   "duration": "3",  "phaseId": "p10", "status": "yapilacak" },
+      { "id": "t48", "title": "Üretim Yazılımı Hazırlığı",           "text": "Golden Image oluşturma.",  "tag": "task", "priority": "high",   "duration": "1",  "phaseId": "p10", "status": "yapilacak" },
+      { "id": "t49", "title": "Proje Kapanış Sunumu",                 "text": "Sonuç aktarımı.",          "tag": "task", "priority": "low",    "duration": "1",  "phaseId": "p10", "status": "yapilacak" },
+      { "id": "t50", "title": "Arşivleme ve Kaynak Kod Devri",        "text": "Repo mühürleme.",          "tag": "task", "priority": "normal", "duration": "1",  "phaseId": "p10", "status": "yapilacak" }
+    ]
+  },
+  "phases": {
+    "mp5ernlfkleqwul152": [
+      { "id": "mp6mshc9t88n5xtbwy", "name": "Fizibilite",                                        "start": "2026-02-01", "end": "2026-03-01" },
+      { "id": "p2",                  "name": "Donanım Bring-up ve HAL Katmanı",                   "start": "2026-03-02", "end": "2026-03-15" },
+      { "id": "p3",                  "name": "RTOS ve Görev Planlama Yapısı",                     "start": "2026-03-16", "end": "2026-03-31" },
+      { "id": "p4",                  "name": "Sensör ve Çevre Birim Sürücüleri",                  "start": "2026-04-01", "end": "2026-04-15" },
+      { "id": "p5",                  "name": "Ana İş Mantığı ve Kontrol Algoritmaları",           "start": "2026-04-16", "end": "2026-05-10" },
+      { "id": "p6",                  "name": "Haberleşme Katmanı (BLE/WiFi/CAN)",                 "start": "2026-05-11", "end": "2026-05-25" },
+      { "id": "p7",                  "name": "Sistem Entegrasyonu ve Lab Testleri",               "start": "2026-05-26", "end": "2026-06-10" },
+      { "id": "p8",                  "name": "Saha Denemeleri Faz-1 (Veri Toplama)",              "start": "2026-06-11", "end": "2026-07-10" },
+      { "id": "p9",                  "name": "Saha Denemeleri Faz-2 (Regresyon Testleri)",        "start": "2026-07-11", "end": "2026-08-10" },
+      { "id": "p10",                 "name": "Final Optimizasyon ve Teslimat",                    "start": "2026-08-11", "end": "2026-08-31" }
+    ]
+  }
+}
